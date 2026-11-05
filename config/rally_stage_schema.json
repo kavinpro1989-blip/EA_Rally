@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EA Rally Stage Definition & GPS Spline Specification",
+  "description": "Defines rally stage geometric road splines, GPS waypoints, elevation profile, terrain surface parameters, and AI co-driver pacenotes.",
+  "version": "1.8.0",
+  "activeStageId": "stage_monte_carlo_turini",
+  "stages": {
+    "stage_monte_carlo_turini": {
+      "id": "stage_monte_carlo_turini",
+      "name": "Col de Turini - Alpine Switchbacks",
+      "region": "Maritime Alps, Monaco / France",
+      "surface": "tarmac",
+      "surfaceGripCoefficient": 0.98,
+      "weather": "sunset",
+      "totalLengthMeters": 4200,
+      "elevationGainMeters": 380,
+      "baseRoadWidthMeters": 5.8,
+      "shoulderWidthMeters": 1.2,
+      "ambientLighting": {
+        "skyColor": "#ff7043",
+        "groundColor": "#3e2723",
+        "sunColor": "#ffab91",
+        "sunPosition": [300, 200, -400],
+        "fogDensity": 0.0007,
+        "fogColor": "#d38067"
+      },
+      "startPoint": { "lat": 43.9782, "lon": 7.3912, "alt": 1220 },
+      "endPoint": { "lat": 43.9985, "lon": 7.3995, "alt": 1600 },
+      "waypoints": [
+        { "distance": 0, "x": 0, "y": 0, "z": 0, "lat": 43.9782, "lon": 7.3912, "elevation": 1220, "camber": 0.0, "width": 6.2 },
+        { "distance": 220, "x": 45, "y": 8, "z": 210, "lat": 43.9791, "lon": 7.3916, "elevation": 1228, "camber": 0.02, "width": 6.0 },
+        { "distance": 450, "x": 160, "y": 22, "z": 410, "lat": 43.9805, "lon": 7.3925, "elevation": 1242, "camber": -0.05, "width": 5.8 },
+        { "distance": 700, "x": 240, "y": 48, "z": 620, "lat": 43.9818, "lon": 7.3932, "elevation": 1268, "camber": 0.08, "width": 5.6 },
+        { "distance": 980, "x": 180, "y": 82, "z": 870, "lat": 43.9829, "lon": 7.3928, "elevation": 1302, "camber": -0.06, "width": 5.8 },
+        { "distance": 1250, "x": 90, "y": 118, "z": 1100, "lat": 43.9840, "lon": 7.3921, "elevation": 1338, "camber": 0.04, "width": 6.0 },
+        { "distance": 1580, "x": 230, "y": 158, "z": 1350, "lat": 43.9855, "lon": 7.3934, "elevation": 1378, "camber": -0.07, "width": 5.6 },
+        { "distance": 1920, "x": 380, "y": 195, "z": 1600, "lat": 43.9872, "lon": 7.3948, "elevation": 1415, "camber": 0.05, "width": 5.8 },
+        { "distance": 2300, "x": 420, "y": 238, "z": 1940, "lat": 43.9891, "lon": 7.3952, "elevation": 1458, "camber": -0.04, "width": 6.0 },
+        { "distance": 2720, "x": 290, "y": 280, "z": 2280, "lat": 43.9912, "lon": 7.3941, "elevation": 1500, "camber": 0.08, "width": 5.6 },
+        { "distance": 3150, "x": 180, "y": 315, "z": 2650, "lat": 43.9935, "lon": 7.3930, "elevation": 1535, "camber": -0.06, "width": 5.8 },
+        { "distance": 3600, "x": 260, "y": 348, "z": 3050, "lat": 43.9961, "lon": 7.3940, "elevation": 1568, "camber": 0.03, "width": 6.2 },
+        { "distance": 4200, "x": 310, "y": 380, "z": 3580, "lat": 43.9985, "lon": 7.3995, "elevation": 1600, "camber": 0.0, "width": 6.5 }
+      ],
+      "pacenotes": [
+        { "distance": 80, "call": "Flat Right 150", "type": "turn", "severity": 6, "direction": "right", "modifier": "flat", "detail": "Stay middle" },
+        { "distance": 260, "call": "Right 4 into Left 3", "type": "turn", "severity": 4, "direction": "right", "modifier": "into", "detail": "Don't cut" },
+        { "distance": 510, "call": "Caution Hairpin Left", "type": "hairpin", "severity": 1, "direction": "left", "modifier": "caution", "detail": "Handbrake turn" },
+        { "distance": 820, "call": "Left 5 over Crest 80", "type": "turn", "severity": 5, "direction": "left", "modifier": "crest", "detail": "Keep in" },
+        { "distance": 1100, "call": "Right 3 Tightens into Hairpin Right", "type": "hairpin", "severity": 1, "direction": "right", "modifier": "tightens", "detail": "Cliff on outside" },
+        { "distance": 1420, "call": "Flat Out 200", "type": "straight", "severity": 6, "direction": "straight", "modifier": "flat", "detail": "Max speed" },
+        { "distance": 1750, "call": "Left 2 Sharp Rock Inside", "type": "turn", "severity": 2, "direction": "left", "modifier": "caution", "detail": "Watch rock face" },
+        { "distance": 2100, "call": "Right 4 over Bridge 60", "type": "hazard", "severity": 4, "direction": "right", "modifier": "narrow", "detail": "Narrow bridge" },
+        { "distance": 2550, "call": "Left 3 into Right 2", "type": "chicane", "severity": 2, "direction": "right", "modifier": "into", "detail": "Technical chicane" },
+        { "distance": 2980, "call": "Hairpin Left Tightens uphill", "type": "hairpin", "severity": 1, "direction": "left", "modifier": "tightens", "detail": "First gear pull" },
+        { "distance": 3450, "call": "Right 5 long 120", "type": "turn", "severity": 5, "direction": "right", "modifier": "long", "detail": "Full throttle exit" },
+        { "distance": 4050, "call": "Finish Flying into Stop Control", "type": "finish", "severity": 6, "direction": "straight", "modifier": "finish", "detail": "Cross flying finish" }
+      ]
+    },
+    "stage_finland_ouninpohja": {
+      "id": "stage_finland_ouninpohja",
+      "name": "Ouninpohja - High-Speed Jumps",
+      "region": "Central Finland",
+      "surface": "gravel",
+      "surfaceGripCoefficient": 0.82,
+      "weather": "sunny",
+      "totalLengthMeters": 5800,
+      "elevationGainMeters": 160,
+      "baseRoadWidthMeters": 6.8,
+      "shoulderWidthMeters": 2.0,
+      "ambientLighting": {
+        "skyColor": "#90caf9",
+        "groundColor": "#2e7d32",
+        "sunColor": "#fff9c4",
+        "sunPosition": [500, 450, -200],
+        "fogDensity": 0.0004,
+        "fogColor": "#cce5ff"
+      },
+      "startPoint": { "lat": 61.8340, "lon": 25.1205, "alt": 110 },
+      "endPoint": { "lat": 61.8720, "lon": 25.1680, "alt": 145 },
+      "waypoints": [
+        { "distance": 0, "x": 0, "y": 0, "z": 0, "lat": 61.8340, "lon": 25.1205, "elevation": 110, "camber": 0.0, "width": 7.0 },
+        { "distance": 450, "x": 60, "y": 15, "z": 440, "lat": 61.8375, "lon": 25.1235, "elevation": 125, "camber": 0.02, "width": 6.8 },
+        { "distance": 950, "x": 140, "y": -5, "z": 930, "lat": 61.8415, "lon": 25.1280, "elevation": 105, "camber": 0.04, "width": 6.8 },
+        { "distance": 1500, "x": 280, "y": 30, "z": 1450, "lat": 61.8460, "lon": 25.1345, "elevation": 140, "camber": -0.03, "width": 7.0 },
+        { "distance": 2200, "x": 390, "y": 55, "z": 2100, "lat": 61.8515, "lon": 25.1410, "elevation": 165, "camber": 0.05, "width": 6.6 },
+        { "distance": 3100, "x": 510, "y": 10, "z": 2950, "lat": 61.8585, "lon": 25.1480, "elevation": 120, "camber": -0.04, "width": 6.8 },
+        { "distance": 4100, "x": 660, "y": 45, "z": 3900, "lat": 61.8655, "lon": 25.1565, "elevation": 155, "camber": 0.03, "width": 7.0 },
+        { "distance": 5000, "x": 780, "y": 20, "z": 4750, "lat": 61.8700, "lon": 25.1620, "elevation": 130, "camber": 0.02, "width": 7.2 },
+        { "distance": 5800, "x": 920, "y": 35, "z": 5500, "lat": 61.8720, "lon": 25.1680, "elevation": 145, "camber": 0.0, "width": 7.5 }
+      ],
+      "pacenotes": [
+        { "distance": 100, "call": "Flat Out 200 into Big Jump", "type": "jump", "severity": 6, "direction": "straight", "modifier": "jump", "detail": "Stay center 50m airtime" },
+        { "distance": 380, "call": "Right 5 over Crest keep right", "type": "turn", "severity": 5, "direction": "right", "modifier": "crest", "detail": "Blind landing" },
+        { "distance": 850, "call": "Left 6 very long into Dip", "type": "turn", "severity": 6, "direction": "left", "modifier": "long", "detail": "Flat 180 km/h" },
+        { "distance": 1350, "call": "Caution Double Jump into Right 4", "type": "jump", "severity": 4, "direction": "right", "modifier": "caution", "detail": "Heavy compression" },
+        { "distance": 1950, "call": "Crest into Left 5 tightens 4", "type": "turn", "severity": 4, "direction": "left", "modifier": "tightens", "detail": "Ditch inside" },
+        { "distance": 2750, "call": "Flat Right over Crest 250", "type": "straight", "severity": 6, "direction": "right", "modifier": "flat", "detail": "Sixth gear" },
+        { "distance": 3600, "call": "Monster Jump 60m!", "type": "jump", "severity": 6, "direction": "straight", "modifier": "jump", "detail": "Full commit" },
+        { "distance": 4450, "call": "Right 4 minus over Crest into Left 3", "type": "turn", "severity": 3, "direction": "left", "modifier": "into", "detail": "Pine trees close" },
+        { "distance": 5600, "call": "Flying Finish 100", "type": "finish", "severity": 6, "direction": "straight", "modifier": "finish", "detail": "Brake hard after line" }
+      ]
+    },
+    "stage_greece_acropolis": {
+      "id": "stage_greece_acropolis",
+      "name": "Acropolis - Rough Rock Mountain Pass",
+      "region": "Mount Parnassus, Central Greece",
+      "surface": "rocky",
+      "surfaceGripCoefficient": 0.74,
+      "weather": "sunny",
+      "totalLengthMeters": 4800,
+      "elevationGainMeters": 410,
+      "baseRoadWidthMeters": 5.2,
+      "shoulderWidthMeters": 0.8,
+      "ambientLighting": {
+        "skyColor": "#81d4fa",
+        "groundColor": "#bcaaa4",
+        "sunColor": "#fff59d",
+        "sunPosition": [200, 600, -300],
+        "fogDensity": 0.0006,
+        "fogColor": "#e8eaf6"
+      },
+      "startPoint": { "lat": 38.5200, "lon": 22.5600, "alt": 850 },
+      "endPoint": { "lat": 38.5520, "lon": 22.5850, "alt": 1260 },
+      "waypoints": [
+        { "distance": 0, "x": 0, "y": 0, "z": 0, "lat": 38.5200, "lon": 22.5600, "elevation": 850, "camber": 0.0, "width": 5.4 },
+        { "distance": 600, "x": 80, "y": 50, "z": 580, "lat": 38.5240, "lon": 22.5630, "elevation": 900, "camber": -0.04, "width": 5.2 },
+        { "distance": 1300, "x": 220, "y": 120, "z": 1220, "lat": 38.5290, "lon": 22.5680, "elevation": 970, "camber": 0.06, "width": 5.0 },
+        { "distance": 2100, "x": 350, "y": 195, "z": 1950, "lat": 38.5350, "lon": 22.5730, "elevation": 1045, "camber": -0.05, "width": 5.2 },
+        { "distance": 3000, "x": 280, "y": 270, "z": 2750, "lat": 38.5410, "lon": 22.5770, "elevation": 1120, "camber": 0.07, "width": 5.0 },
+        { "distance": 3900, "x": 390, "y": 345, "z": 3550, "lat": 38.5470, "lon": 22.5810, "elevation": 1195, "camber": -0.04, "width": 5.3 },
+        { "distance": 4800, "x": 480, "y": 410, "z": 4350, "lat": 38.5520, "lon": 22.5850, "elevation": 1260, "camber": 0.0, "width": 5.8 }
+      ],
+      "pacenotes": [
+        { "distance": 120, "call": "Caution Rough Surface into Right 3", "type": "hazard", "severity": 3, "direction": "right", "modifier": "rough", "detail": "Loose bedrock" },
+        { "distance": 520, "call": "Left 2 over Rocks don't cut", "type": "turn", "severity": 2, "direction": "left", "modifier": "caution", "detail": "Puncture risk" },
+        { "distance": 1150, "call": "Hairpin Right narrow cliff", "type": "hairpin", "severity": 1, "direction": "right", "modifier": "narrow", "detail": "Steep drop on left" },
+        { "distance": 1850, "call": "Left 4 plus 100 over Crest", "type": "turn", "severity": 4, "direction": "left", "modifier": "crest", "detail": "Heavy dust trail" },
+        { "distance": 2600, "call": "Right 2 Sharp Rock Face", "type": "turn", "severity": 2, "direction": "right", "modifier": "sharp", "detail": "Tight rocky corridor" },
+        { "distance": 3500, "call": "Hairpin Left open into Flat Right", "type": "hairpin", "severity": 1, "direction": "left", "modifier": "into", "detail": "Power slide exit" },
+        { "distance": 4600, "call": "Flying Finish through Quarry", "type": "finish", "severity": 6, "direction": "straight", "modifier": "finish", "detail": "Full power across line" }
+      ]
+    }
+  }
+}

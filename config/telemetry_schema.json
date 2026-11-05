@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EA Rally Real-Time Telemetry Data Broadcast Specification",
+  "description": "Standardized schema for high-frequency telemetry broadcast between the physics engine, Three.js 3D Viewport, HUD overlay, and Co-Driver voice/visual subsystem.",
+  "version": "2.1.0",
+  "type": "object",
+  "properties": {
+    "timestamp": { "type": "number", "description": "Frame millisecond timestamp" },
+    "tick": { "type": "integer", "description": "Physics simulation tick count" },
+    "vehicle": {
+      "type": "object",
+      "properties": {
+        "speedKph": { "type": "number" },
+        "speedMph": { "type": "number" },
+        "engineRpm": { "type": "number" },
+        "gear": { "type": "integer", "description": "-1: R, 0: N, 1-6" },
+        "throttle": { "type": "number", "minimum": 0, "maximum": 1 },
+        "brake": { "type": "number", "minimum": 0, "maximum": 1 },
+        "clutch": { "type": "number", "minimum": 0, "maximum": 1 },
+        "handbrake": { "type": "number", "minimum": 0, "maximum": 1 },
+        "steeringAngleDeg": { "type": "number" },
+        "turboBoostBar": { "type": "number" },
+        "peakBoostBar": { "type": "number" },
+        "antiLagActive": { "type": "boolean" },
+        "limiterActive": { "type": "boolean" }
+      },
+      "required": ["speedKph", "engineRpm", "gear", "throttle", "brake", "steeringAngleDeg", "turboBoostBar"]
+    },
+    "gForces": {
+      "type": "object",
+      "properties": {
+        "lateralG": { "type": "number", "description": "Cornering G-force: positive right, negative left" },
+        "longitudinalG": { "type": "number", "description": "Acceleration (positive) / Deceleration (negative)" },
+        "verticalG": { "type": "number", "description": "Vertical crests and compressions" },
+        "yawRateDegS": { "type": "number" }
+      },
+      "required": ["lateralG", "longitudinalG", "verticalG"]
+    },
+    "suspension": {
+      "type": "object",
+      "properties": {
+        "fl": { "$ref": "#/definitions/wheelSuspension" },
+        "fr": { "$ref": "#/definitions/wheelSuspension" },
+        "rl": { "$ref": "#/definitions/wheelSuspension" },
+        "rr": { "$ref": "#/definitions/wheelSuspension" }
+      },
+      "required": ["fl", "fr", "rl", "rr"]
+    },
+    "tires": {
+      "type": "object",
+      "properties": {
+        "fl": { "$ref": "#/definitions/tireTelemetry" },
+        "fr": { "$ref": "#/definitions/tireTelemetry" },
+        "rl": { "$ref": "#/definitions/tireTelemetry" },
+        "rr": { "$ref": "#/definitions/tireTelemetry" }
+      },
+      "required": ["fl", "fr", "rl", "rr"]
+    },
+    "drivetrain": {
+      "type": "object",
+      "properties": {
+        "frontDiffLockPct": { "type": "number" },
+        "centerDiffLockPct": { "type": "number" },
+        "rearDiffLockPct": { "type": "number" },
+        "wheelSpinRps": {
+          "type": "object",
+          "properties": {
+            "fl": { "type": "number" },
+            "fr": { "type": "number" },
+            "rl": { "type": "number" },
+            "rr": { "type": "number" }
+          }
+        }
+      }
+    },
+    "stageProgress": {
+      "type": "object",
+      "properties": {
+        "currentDistanceM": { "type": "number" },
+        "totalDistanceM": { "type": "number" },
+        "progressPercent": { "type": "number" },
+        "elapsedTimeSec": { "type": "number" },
+        "deltaSec": { "type": "number" },
+        "activePacenote": {
+          "type": "object",
+          "properties": {
+            "call": { "type": "string" },
+            "distanceToApexM": { "type": "number" },
+            "severity": { "type": "integer" },
+            "direction": { "type": "string" },
+            "modifier": { "type": "string" },
+            "detail": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "wheelSuspension": {
+      "type": "object",
+      "properties": {
+        "travelMm": { "type": "number" },
+        "maxTravelMm": { "type": "number" },
+        "compressionPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "damperVelocityMs": { "type": "number" },
+        "bottomedOut": { "type": "boolean" }
+      },
+      "required": ["travelMm", "compressionPct", "bottomedOut"]
+    },
+    "tireTelemetry": {
+      "type": "object",
+      "properties": {
+        "coreTempC": { "type": "number" },
+        "surfaceTempC": { "type": "number" },
+        "pressurePsi": { "type": "number" },
+        "slipAngleDeg": { "type": "number" },
+        "slipRatio": { "type": "number" },
+        "gripUtilPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "surfaceContact": { "type": "boolean" }
+      },
+      "required": ["coreTempC", "surfaceTempC", "slipAngleDeg", "gripUtilPct"]
+    }
+  }
+}

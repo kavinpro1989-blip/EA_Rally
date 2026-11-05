@@ -1,0 +1,11 @@
+{
+  "$comment": "dt is the fixed physics step [s]. ambient is the sea-level reference atmosphere; with altitudeCorrection the engine and aero use the ISA values at the stage elevation.",
+  "dt": 0.002,
+  "maxStepsPerUpdate": 100,
+  "ambient": { "temperature": 288.15, "pressure": 101325, "altitudeCorrection": true },
+  "wind": { "x": 0, "y": 0, "z": 0 },
+  "telemetryHz": 60,
+  "seed": 1,
+  "evolution": { "enabled": true, "rowSpacing": 1.0, "columnSpacing": 0.25 },
+  "flatTerrain": { "height": 0, "layers": [{ "type": "tarmac" }] }
+}

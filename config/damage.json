@@ -1,0 +1,103 @@
+{
+  "$comment": "Component wear and damage model parameters. Temperatures in K, energies in J.",
+  "seed": 20241015,
+  "brakes": {
+    "pedalResponseTime": 0.03,
+    "discMass": {
+      "front": 8.5,
+      "rear": 6.0
+    },
+    "discSpecificHeat": 480,
+    "coolingBase": 10,
+    "coolingSpeed": 2.4,
+    "radiativeArea": 0.04,
+    "padFrictionByTemp": [
+      [
+        250,
+        0.7
+      ],
+      [
+        293,
+        0.8
+      ],
+      [
+        400,
+        0.94
+      ],
+      [
+        520,
+        1.0
+      ],
+      [
+        820,
+        1.0
+      ],
+      [
+        920,
+        0.8
+      ],
+      [
+        1020,
+        0.5
+      ],
+      [
+        1150,
+        0.3
+      ]
+    ],
+    "fluidBoilK": 480,
+    "fluidFade": 0.6,
+    "fluidCoupling": 0.5,
+    "fluidTimeConstant": 25,
+    "padWearPerJoule": 9e-09
+  },
+  "cooling": {
+    "coolantMass": 7.5,
+    "coolantSpecificHeat": 3400,
+    "engineThermalMass": 32000,
+    "heatFractionToCoolant": 0.3,
+    "radiatorUA": 1400,
+    "radiatorUAAirExponent": 0.6,
+    "radiatorAirReferenceSpeed": 25,
+    "fanSpeedEquivalent": 6,
+    "heatLossToAmbient": 40,
+    "systemPressure": 120000,
+    "thermostatOpenK": 363,
+    "thermostatFullK": 373,
+    "leakCoefficient": 3e-06,
+    "airLockLevel": 0.45,
+    "initialTempOffsetK": 65,
+    "overheatK": 393,
+    "seizeK": 413,
+    "seizeTime": 8,
+    "radiatorBlockageEffect": 0.8
+  },
+  "intercooler": {
+    "mudBlockPerMeterSplash": 0.012,
+    "snowBlockPerMeter": 0.006,
+    "gravelDustBlockPerMeter": 0.004,
+    "airflowClearRate": 0.05,
+    "speedForClearing": 40
+  },
+  "impact": {
+    "stoneStrikePerSecondAt30ms": 0.01,
+    "looseDepthForStones": 0.02,
+    "radiatorHitEnergyJ": 120,
+    "radiatorPunctureEnergyJ": 400,
+    "tieRodBendEnergyJ": 1500,
+    "tieRodBendRadPerJoule": 1.2e-05,
+    "tieRodMaxToeRad": 0.09,
+    "shockToEnergy": 0.35,
+    "underbodyRadiatorEnergyFactor": 0.3,
+    "tireLeakEnergyJ": 150,
+    "tireLeakRate": 0.004,
+    "episodeGap": 0.2
+  },
+  "turbo": {
+    "overspeedDamagePerSecond": 0.02,
+    "exhaustDamageK": 1420,
+    "exhaustDamagePerSecond": 0.004,
+    "boostLeakAtFullDamage": 0.6
+  },
+  "damperWearPerMeter": 2.5e-06
+}

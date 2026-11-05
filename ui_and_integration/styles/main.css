@@ -1,0 +1,317 @@
+/**
+ * @file /ui_and_integration/styles/main.css
+ * @description Master Stylesheet: Typography, Glassmorphism Panels, Header Bar, and Shared UI Components.
+ * Lead Frontend & Three.js 3D Viewport Engineer - EA Rally Integration
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+:root {
+  --rally-red: #e10600;
+  --rally-red-glow: rgba(225, 6, 0, 0.45);
+  --rally-cyan: #00e5ff;
+  --rally-gold: #ffd600;
+  --rally-green: #00e676;
+  --rally-bg-dark: #0a0e14;
+  --rally-panel-bg: rgba(14, 20, 28, 0.78);
+  --rally-panel-border: rgba(255, 255, 255, 0.12);
+  --rally-text-main: #f0f4f8;
+  --rally-text-muted: #8b9bb4;
+  --font-display: 'Chakra Petch', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--rally-bg-dark);
+  color: var(--rally-text-main);
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+
+#appRoot {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Master Header & Navigation Bar */
+.rally-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: linear-gradient(180deg, rgba(8, 12, 18, 0.92) 0%, rgba(8, 12, 18, 0.65) 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rally-panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-logo-text .badge-wrc {
+  background: var(--rally-red);
+  color: #ffffff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.mode-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--rally-panel-border);
+}
+
+.nav-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--rally-text-muted);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tab-btn.active {
+  background: var(--rally-red);
+  color: #ffffff;
+  box-shadow: 0 0 14px var(--rally-red-glow);
+}
+
+.topbar-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.audio-toggle-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--rally-panel-border);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.audio-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: var(--rally-panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--rally-panel-border);
+  border-radius: 10px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+}
+
+.glass-subpanel {
+  background: rgba(18, 26, 36, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Common UI Elements */
+.panel-section-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--rally-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rally-input, .rally-select {
+  width: 100%;
+  background: rgba(10, 14, 20, 0.85);
+  border: 1px solid var(--rally-panel-border);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.rally-input:focus, .rally-select:focus {
+  border-color: var(--rally-red);
+}
+
+.rally-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--rally-panel-border);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rally-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.rally-btn.primary {
+  background: var(--rally-red);
+  border-color: #ff3333;
+}
+
+.rally-btn.primary:hover {
+  background: #ff1a1a;
+  box-shadow: 0 0 16px var(--rally-red-glow);
+}
+
+.pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(225, 6, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0); }
+}
+
+/* Toast Notifications */
+.rally-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(15, 22, 32, 0.95);
+  border: 1px solid var(--rally-red);
+  border-radius: 8px;
+  padding: 12px 24px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.rally-toast.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-title {
+  font-weight: 800;
+  color: var(--rally-red);
+  letter-spacing: 0.5px;
+}
+
+/* Controls Legend Card */
+.controls-legend-card {
+  position: absolute;
+  top: 72px;
+  left: 24px;
+  background: rgba(14, 20, 28, 0.75);
+  border: 1px solid var(--rally-panel-border);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 10px 14px;
+  z-index: 50;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+.controls-legend-card:hover {
+  background: rgba(14, 20, 28, 0.92);
+}
+
+.legend-header {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--rally-cyan);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 14px;
+  font-size: 11px;
+  color: var(--rally-text-muted);
+}
+
+.legend-grid kbd {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #ffffff;
+  font-weight: 700;
+}

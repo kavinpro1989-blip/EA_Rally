@@ -1,0 +1,89 @@
+{
+  "$comment": "Rally2-class 1.6 L turbo four. SI units except where a key says otherwise (rpm, kPa, deg).",
+  "engine": {
+    "name": "1.6L I4 turbo (restricted)",
+    "displacement": 0.00162,
+    "inertia": 0.22,
+    "idleRpm": 1100,
+    "stallRpm": 450,
+    "startRunning": true,
+    "torqueCurve": [
+      [1000, 80], [1500, 110], [2000, 190], [2500, 300], [3000, 360], [3500, 390], [4000, 405],
+      [4500, 400], [5000, 392], [5500, 375], [6000, 350], [6500, 320], [7000, 290]
+    ],
+    "dynoBoostKPa": [
+      [1000, 0], [1500, 15], [2000, 50], [2500, 95], [3000, 122], [3500, 142], [4000, 150],
+      [5000, 150], [6000, 145], [7000, 140]
+    ],
+    "dynoIntakeTempK": 318,
+    "dynoAmbientPressure": 101325,
+    "volumetricEfficiency": [[1000, 0.8], [2500, 0.9], [4000, 0.95], [5500, 0.93], [7000, 0.86]],
+    "friction": { "f0": 9, "f1": 0.010, "f2": 2.8e-5, "pumpingGain": 1.1 },
+    "throttle": { "responseTime": 0.04, "idleFlowFraction": 0.18, "flowExponent": 2.5 },
+    "torqueResponseTime": 0.03,
+    "ignition": {
+      "retardEfficiency": [[0, 1], [10, 0.97], [20, 0.88], [30, 0.7], [40, 0.45], [50, 0.2], [60, 0.0]],
+      "retardExhaustHeatK": 220
+    },
+    "exhaust": { "afr": 12.8, "tempLowK": 900, "tempHighK": 1250 },
+    "starter": { "torque": 90, "cutoffRpm": 600 }
+  },
+  "ecu": {
+    "throttleMap": {
+      "x": [0, 1000, 2000, 3000, 4500, 6000, 7500],
+      "y": [0, 0.1, 0.25, 0.5, 0.75, 1.0],
+      "z": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0.08, 0.09, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.2, 0.23, 0.25, 0.26, 0.26, 0.26, 0.26],
+        [0.45, 0.48, 0.5, 0.52, 0.52, 0.52, 0.52],
+        [0.72, 0.76, 0.79, 0.8, 0.8, 0.8, 0.8],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    "boostTargetMap": {
+      "x": [1000, 2000, 3000, 4000, 5000, 6000, 7000],
+      "y": [0, 0.3, 0.6, 1.0],
+      "z": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 15, 30, 45, 45, 45, 45],
+        [0, 40, 80, 100, 100, 100, 100],
+        [0, 60, 125, 150, 150, 145, 140]
+      ]
+    },
+    "idle": { "kp": 0.0006, "ki": 0.0015, "baseThrottle": 0.03, "maxThrottle": 0.25 },
+    "revLimiter": { "rpm": 6900, "hysteresis": 150 },
+    "launch": { "enabled": true, "rpm": 4500, "maxSpeed": 2.0, "maxRetardDeg": 35 },
+    "als": {
+      "enabled": true, "minRpm": 3000, "pedalThreshold": 0.08, "throttle": 0.1, "retardDeg": 45,
+      "extraExhaustK": 100, "fuelMultiplier": 1.5, "exhaustFlowBoost": 1.3, "boostTargetKPa": 120,
+      "maxExhaustTempK": 1400, "maxDuration": 10, "cooldown": 2
+    },
+    "boostControl": { "kp": 0.001, "ki": 0.002, "integralLimit": 50, "feedForward": 0.9, "overboostKPa": 220 },
+    "overheatDerate": { "startK": 388, "endK": 403, "minPower": 0.55 },
+    "blip": { "throttle": 0.35 }
+  },
+  "turbo": {
+    "shaftInertia": 1.6e-5,
+    "idleShaftSpeed": 3000,
+    "maxShaftSpeed": 21000,
+    "frictionCoefficient": 4e-6,
+    "coulombFriction": 0.002,
+    "plenumVolume": 0.0065,
+    "compressor": {
+      "tipRadius": 0.0275, "efficiency": 0.72, "workCoefficient": 0.58,
+      "chokeFlow": 0.3, "referenceSpeed": 20000, "surgeBackflow": 0.5
+    },
+    "turbine": { "efficiency": 0.62, "flowCoefficient": 2.0e-5 },
+    "wastegate": {
+      "springPressure": 60000, "maxControlPressure": 260000, "pressureRange": 70000,
+      "responseTime": 0.06, "flowFraction": 0.85
+    },
+    "blowOff": { "flowCoefficient": 2.0e-4, "responseTime": 0.03 }
+  },
+  "intercooler": {
+    "effectiveness": 0.78, "airflowBase": 0.55, "airflowSpeed": 25, "blockageEffect": 0.85,
+    "thermalTimeConstant": 0.6, "pressureDropBase": 0.04, "blockagePressureDrop": 3.0,
+    "bovThrottleThreshold": 0.12, "bovMinBoost": 15000
+  }
+}

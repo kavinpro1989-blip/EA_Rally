@@ -1,0 +1,261 @@
+/**
+ * @file /ui_and_integration/styles/stage_picker.css
+ * @description Google Maps Topographic Stage Picker, Elevation Profile Canvas, and Route Compiler Styles.
+ * Lead Frontend & Three.js 3D Viewport Engineer - EA Rally Integration
+ */
+
+.stage-picker-overlay {
+  position: absolute;
+  top: 64px;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  pointer-events: auto;
+}
+
+.stage-picker-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.stage-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rally-panel-border);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.stage-picker-header .header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stage-picker-header h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.live-badge {
+  background: rgba(0, 230, 118, 0.15);
+  border: 1px solid var(--rally-green);
+  color: var(--rally-green);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.stage-picker-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Left Presets & Controls */
+.stage-presets-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.stage-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stage-preset-card {
+  background: rgba(18, 26, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stage-preset-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stage-preset-card.active {
+  border-color: var(--rally-red);
+  background: rgba(225, 6, 0, 0.12);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.3);
+}
+
+.stage-preset-card .card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.stage-preset-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.stage-preset-card .card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--rally-text-muted);
+  font-family: var(--font-mono);
+}
+
+.stage-preset-card .card-meta strong {
+  color: #ffffff;
+}
+
+/* Custom Route Form */
+.custom-route-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-row label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rally-text-muted);
+  text-transform: uppercase;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.map-action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.map-action-buttons button {
+  flex: 1;
+}
+
+/* Right Map & Elevation */
+.stage-map-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.map-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-mode-tabs .tab-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rally-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.waypoint-counter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--rally-cyan);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.map-canvas-container {
+  position: relative;
+  flex: 1;
+  background: #111822;
+  border-radius: 8px;
+  border: 1px solid var(--rally-panel-border);
+  overflow: hidden;
+  min-height: 240px;
+}
+
+.stage-map-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.map-overlay-instructions {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  background: rgba(10, 14, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: #cccccc;
+  pointer-events: none;
+}
+
+/* Elevation Profile Mount */
+.elevation-profile-container {
+  height: 190px;
+  background: rgba(18, 26, 36, 0.7);
+  border-radius: 8px;
+  border: 1px solid var(--rally-panel-border);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.profile-header h4 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--rally-text-muted);
+}
+
+.elev-stats {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--rally-cyan);
+}
+
+.elevation-graph-mount {
+  flex: 1;
+  position: relative;
+}
+
+.elevation-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

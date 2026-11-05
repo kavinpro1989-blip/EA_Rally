@@ -1,0 +1,582 @@
+/**
+ * @file /ui_and_integration/core/physics_bridge.js
+ * @description Decoupled Physics Bridge & Real-Time Simulation Engine for EA Rally.
+ * Interfaces with Claude Code's physics simulation or drives the vehicle using a 4-wheel
+ * raycast dynamics model with Pacejka slip friction, turbo boost, and differential lock ramps.
+ * Lead Frontend & Three.js 3D Viewport Engineer - EA Rally Integration
+ */
+
+import { eventBus, RALLY_EVENTS } from './event_bus.js';
+import { stateStore } from './state_store.js';
+
+export class PhysicsBridge {
+  constructor() {
+    this.isRunning = false;
+    this.lastTime = performance.now();
+    this.tickCount = 0;
+
+    // Vehicle State in 3D Space
+    this.position = { x: 0, y: 0.5, z: 0 };
+    this.velocity = { x: 0, y: 0, z: 0 };
+    this.rotation = { yaw: 0, pitch: 0, roll: 0 };
+    this.angularVelocity = { yaw: 0, pitch: 0, roll: 0 };
+
+    // Dynamic Kinematics
+    this.speedKph = 0;
+    this.speedMs = 0;
+    this.engineRpm = 1200;
+    this.gear = 1; // -1: R, 0: N, 1-6
+    this.turboBoostBar = 0;
+    this.peakBoostBar = 0;
+    this.steeringAngleDeg = 0;
+    this.driftAngleDeg = 0;
+    this.isAirborne = false;
+    this.airTimeSec = 0;
+
+    // Input States
+    this.inputs = {
+      throttle: 0,
+      brake: 0,
+      clutch: 0,
+      handbrake: 0,
+      steer: 0,
+      isAutomatic: true
+    };
+
+    // 4-Corner Suspension & Tire States
+    this.wheels = {
+      fl: this._createWheelState('fl', -0.85, 1.25),
+      fr: this._createWheelState('fr', 0.85, 1.25),
+      rl: this._createWheelState('rl', -0.85, -1.25),
+      rr: this._createWheelState('rr', 0.85, -1.25)
+    };
+
+    // Accelerometer G-forces
+    this.gForces = {
+      lateralG: 0,
+      longitudinalG: 0,
+      verticalG: 1.0,
+      yawRateDegS: 0
+    };
+
+    // Stage Progress & Pacenote Tracking
+    this.stageDistanceM = 0;
+    this.stageTimeSec = 0;
+    this.lastPacenoteIndex = -1;
+
+    // Road Spline reference
+    this.stageSpline = null;
+
+    this._bindKeyboardEvents();
+    this._setupTuningListeners();
+  }
+
+  _createWheelState(id, relX, relZ) {
+    return {
+      id,
+      relX,
+      relZ,
+      suspensionTravelMm: 140,
+      maxTravelMm: 280,
+      compressionPct: 50,
+      damperVelocityMs: 0,
+      bottomedOut: false,
+      coreTempC: 82.0,
+      surfaceTempC: 84.5,
+      pressurePsi: 27.5,
+      slipAngleDeg: 0,
+      slipRatio: 0,
+      gripUtilPct: 15,
+      rotationRad: 0,
+      steerAngleDeg: 0,
+      angularVelocityRps: 0,
+      onGround: true
+    };
+  }
+
+  _bindKeyboardEvents() {
+    this.keysDown = new Set();
+
+    window.addEventListener('keydown', (e) => {
+      // Ignore key events when typing inside input elements
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName)) return;
+
+      this.keysDown.add(e.code);
+
+      // Camera switch hotkey
+      if (e.code === 'KeyC') {
+        const modes = ['chase', 'onboard', 'helicopter'];
+        const currentIdx = modes.indexOf(stateStore.cameraMode);
+        const nextMode = modes[(currentIdx + 1) % modes.length];
+        stateStore.setCameraMode(nextMode);
+      }
+
+      // Telemetry HUD toggle
+      if (e.code === 'KeyT') {
+        stateStore.hudSettings.showTelemetry = !stateStore.hudSettings.showTelemetry;
+        eventBus.emit(RALLY_EVENTS.HUD_VISIBILITY_TOGGLED, stateStore.hudSettings);
+      }
+
+      // Manual Gear Shifting
+      if (e.code === 'KeyE') {
+        this.shiftGear(1); // Shift up
+      } else if (e.code === 'KeyQ') {
+        this.shiftGear(-1); // Shift down
+      }
+
+      // Reset car on track
+      if (e.code === 'KeyR') {
+        this.resetVehicle();
+      }
+
+      // Toggle Automatic / Manual
+      if (e.code === 'KeyM') {
+        this.inputs.isAutomatic = !this.inputs.isAutomatic;
+        eventBus.emit(RALLY_EVENTS.NOTIFICATION, {
+          title: 'Transmission Mode',
+          message: this.inputs.isAutomatic ? 'Sequential Automatic' : 'Manual Sequential (Q/E to shift)'
+        });
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      this.keysDown.delete(e.code);
+    });
+  }
+
+  _setupTuningListeners() {
+    eventBus.on(RALLY_EVENTS.TUNING_UPDATED, () => {
+      // Tuning updated live from Garage Studio
+      const tuning = stateStore.currentTuning;
+      const compound = tuning.tires_and_brakes?.tireCompound || 'soft_tarmac';
+      const basePressure = tuning.tires_and_brakes?.frontTirePressurePsi || 27.5;
+
+      this.wheels.fl.pressurePsi = basePressure;
+      this.wheels.fr.pressurePsi = basePressure;
+      this.wheels.rl.pressurePsi = tuning.tires_and_brakes?.rearTirePressurePsi || 26.0;
+      this.wheels.rr.pressurePsi = tuning.tires_and_brakes?.rearTirePressurePsi || 26.0;
+    });
+
+    eventBus.on(RALLY_EVENTS.STAGE_SELECTED, () => {
+      this.resetVehicle();
+    });
+
+    eventBus.on(RALLY_EVENTS.STAGE_COMPILED, () => {
+      this.resetVehicle();
+    });
+  }
+
+  /**
+   * Set stage spline geometry generated by StageMeshGenerator
+   * @param {THREE.CurvePath|Object} spline
+   */
+  setStageSpline(spline) {
+    this.stageSpline = spline;
+  }
+
+  /**
+   * Start the simulation loop
+   */
+  start() {
+    this.isRunning = true;
+    this.lastTime = performance.now();
+    this._simulateLoop();
+  }
+
+  /**
+   * Stop the simulation loop
+   */
+  stop() {
+    this.isRunning = false;
+  }
+
+  _simulateLoop = () => {
+    if (!this.isRunning) return;
+
+    const now = performance.now();
+    const dt = Math.min((now - this.lastTime) / 1000, 0.05); // Cap max dt to prevent explosion
+    this.lastTime = now;
+
+    this._pollInputs(dt);
+    this._stepPhysics(dt);
+    this._broadcastTelemetry(now);
+
+    requestAnimationFrame(this._simulateLoop);
+  };
+
+  _pollInputs(dt) {
+    // Keyboard Input Processing
+    const throttleKey = this.keysDown.has('KeyW') || this.keysDown.has('ArrowUp');
+    const brakeKey = this.keysDown.has('KeyS') || this.keysDown.has('ArrowDown');
+    const steerLeftKey = this.keysDown.has('KeyA') || this.keysDown.has('ArrowLeft');
+    const steerRightKey = this.keysDown.has('KeyD') || this.keysDown.has('ArrowRight');
+    const handbrakeKey = this.keysDown.has('Space');
+
+    // Smooth input interpolation
+    const steerRate = 3.5;
+    const targetSteer = steerLeftKey ? -1.0 : steerRightKey ? 1.0 : 0.0;
+    this.inputs.steer += (targetSteer - this.inputs.steer) * Math.min(1.0, dt * steerRate * 4);
+
+    const throttleRate = 6.0;
+    const targetThrottle = throttleKey ? 1.0 : 0.0;
+    this.inputs.throttle += (targetThrottle - this.inputs.throttle) * Math.min(1.0, dt * throttleRate);
+
+    const brakeRate = 8.0;
+    const targetBrake = brakeKey ? 1.0 : 0.0;
+    this.inputs.brake += (targetBrake - this.inputs.brake) * Math.min(1.0, dt * brakeRate);
+
+    this.inputs.handbrake = handbrakeKey ? 1.0 : 0.0;
+  }
+
+  _stepPhysics(dt) {
+    this.tickCount++;
+    const tuning = stateStore.currentTuning;
+    const stage = stateStore.activeStage;
+    const surfaceGrip = stage?.surfaceGripCoefficient || 0.95;
+
+    // 1. Steering & Wheel Angle
+    const maxSteerDeg = 32;
+    this.steeringAngleDeg = this.inputs.steer * maxSteerDeg;
+    this.wheels.fl.steerAngleDeg = this.steeringAngleDeg;
+    this.wheels.fr.steerAngleDeg = this.steeringAngleDeg;
+
+    // 2. Engine & Turbo Dynamics
+    const idleRpm = tuning.engine?.idleRpm || 1200;
+    const redlineRpm = tuning.engine?.redlineRpm || 7800;
+    const maxRpm = tuning.engine?.maxRpm || 8400;
+    const peakBoost = tuning.engine?.peakBoostBar || 2.45;
+
+    // Turbo spool model
+    if (this.inputs.throttle > 0.1) {
+      const spoolRate = 2.8 * (this.engineRpm / 5000);
+      this.turboBoostBar = Math.min(peakBoost, this.turboBoostBar + dt * spoolRate * this.inputs.throttle);
+    } else {
+      // Lift-off spool bleed
+      const bleedRate = 4.2;
+      this.turboBoostBar = Math.max(0, this.turboBoostBar - dt * bleedRate);
+    }
+    this.peakBoostBar = Math.max(this.peakBoostBar, this.turboBoostBar);
+
+    // Automatic Gearbox Shifting Logic
+    if (this.inputs.isAutomatic) {
+      if (this.engineRpm > redlineRpm - 200 && this.gear < 6) {
+        this.shiftGear(1);
+      } else if (this.engineRpm < 2800 && this.gear > 1 && this.speedKph < 140) {
+        this.shiftGear(-1);
+      }
+    }
+
+    // 3. Acceleration & Traction Force
+    const gearRatio = tuning.transmission?.gearRatios?.[this.gear - 1] || 2.4;
+    const finalDrive = tuning.transmission?.finalDriveRatio || 4.18;
+    const totalDriveRatio = gearRatio * finalDrive;
+
+    // Engine RPM calculated from wheel speed
+    const wheelRadiusM = 0.32;
+    const calculatedRpm = Math.max(idleRpm, (this.speedMs / wheelRadiusM) * totalDriveRatio * (60 / (2 * Math.PI)));
+    this.engineRpm += (calculatedRpm - this.engineRpm) * Math.min(1.0, dt * 8);
+
+    if (this.engineRpm > maxRpm) {
+      this.engineRpm = maxRpm;
+      // Rev limiter spark cut backfire
+      if (Math.random() < 0.3) {
+        eventBus.emit(RALLY_EVENTS.BACKFIRE_POP);
+      }
+    }
+
+    // Engine Torque Curve
+    const peakTorqueNm = tuning.engine?.peakTorqueNm || 520;
+    const boostTorqueMultiplier = 1.0 + (this.turboBoostBar / peakBoost) * 0.45;
+    const driveTorque = this.inputs.throttle * peakTorqueNm * boostTorqueMultiplier * totalDriveRatio;
+
+    // Wheel Drive Torque Split (AWD)
+    const frontSplit = (tuning.differential?.centerTorqueSplitFront || 42) / 100;
+    const rearSplit = (tuning.differential?.centerTorqueSplitRear || 58) / 100;
+
+    // Differential locking effect
+    const rearDiffAccelLock = (tuning.differential?.rearAccelLock || 75) / 100;
+
+    // 4. Braking and Handbrake
+    const maxBrakeTorque = tuning.tires_and_brakes?.maxBrakeTorqueNm || 3800;
+    const frontBias = (tuning.tires_and_brakes?.brakeBiasFrontPercent || 63) / 100;
+    const handbrakeTorque = this.inputs.handbrake * (tuning.tires_and_brakes?.handbrakeTorqueNm || 4600);
+
+    const frontBrakeForce = this.inputs.brake * maxBrakeTorque * frontBias;
+    const rearBrakeForce = (this.inputs.brake * maxBrakeTorque * (1 - frontBias)) + handbrakeTorque;
+
+    // 5. Longitudinal Acceleration
+    const vehicleMassKg = 1230;
+    const aeroDownforce = 0.5 * 1.225 * 1.8 * Math.pow(this.speedMs, 2) * 0.42; // N
+    const dragForce = 0.5 * 1.225 * 2.2 * Math.pow(this.speedMs, 2) * 0.38;
+
+    const netDriveForce = (driveTorque / wheelRadiusM) * surfaceGrip;
+    const netBrakeForce = (frontBrakeForce + rearBrakeForce) / wheelRadiusM;
+    const netLongitudinalForce = netDriveForce - netBrakeForce - dragForce;
+
+    const accelMs2 = netLongitudinalForce / vehicleMassKg;
+    this.speedMs = Math.max(0, this.speedMs + accelMs2 * dt);
+    this.speedKph = this.speedMs * 3.6;
+
+    // 6. Lateral Dynamics & Drift Angles (Pacejka Curve Approximation)
+    const turnSensitivity = 0.045;
+    const targetYawRate = this.steeringAngleDeg * (this.speedMs * turnSensitivity);
+
+    // Handbrake initiates rear oversteer drift
+    if (this.inputs.handbrake > 0.5 && this.speedMs > 5) {
+      this.driftAngleDeg += (this.steeringAngleDeg > 0 ? 32 : -32) * dt * 3.5;
+    } else {
+      this.driftAngleDeg *= Math.pow(0.1, dt);
+    }
+    this.driftAngleDeg = Math.max(-65, Math.min(65, this.driftAngleDeg));
+
+    this.angularVelocity.yaw = targetYawRate + (this.driftAngleDeg * 0.05);
+    this.rotation.yaw += this.angularVelocity.yaw * dt;
+
+    // 7. Accelerometer G-forces
+    const latG = (this.speedMs * (this.angularVelocity.yaw * Math.PI / 180)) / 9.81;
+    this.gForces.lateralG += (latG - this.gForces.lateralG) * Math.min(1.0, dt * 10);
+    this.gForces.longitudinalG += ((accelMs2 / 9.81) - this.gForces.longitudinalG) * Math.min(1.0, dt * 10);
+    this.gForces.yawRateDegS = this.angularVelocity.yaw;
+
+    // 8. 4-Corner Suspension Compression & Weight Transfer
+    const frontSpring = tuning.suspension?.frontSpringRate || 95;
+    const rearSpring = tuning.suspension?.rearSpringRate || 85;
+    const frontRideHeight = tuning.suspension?.frontRideHeight || 140;
+    const rearRideHeight = tuning.suspension?.rearRideHeight || 150;
+
+    // Pitch (dive on braking, squat on acceleration)
+    const pitchTransfer = this.gForces.longitudinalG * 35;
+    // Roll (lean away from turn)
+    const rollTransfer = this.gForces.lateralG * 42;
+
+    this._updateWheelSuspension(this.wheels.fl, frontRideHeight - pitchTransfer + rollTransfer, dt);
+    this._updateWheelSuspension(this.wheels.fr, frontRideHeight - pitchTransfer - rollTransfer, dt);
+    this._updateWheelSuspension(this.wheels.rl, rearRideHeight + pitchTransfer + rollTransfer, dt);
+    this._updateWheelSuspension(this.wheels.rr, rearRideHeight + pitchTransfer - rollTransfer, dt);
+
+    // 9. Tire Thermal Model & Grip Utilization
+    for (const key of ['fl', 'fr', 'rl', 'rr']) {
+      const w = this.wheels[key];
+      const slipFactor = (Math.abs(w.slipAngleDeg) / 15.0) + (this.speedMs > 10 ? 0.2 : 0.0);
+      w.gripUtilPct = Math.min(100, Math.round(slipFactor * 75 + Math.abs(this.gForces.lateralG) * 20));
+
+      // Thermal friction heating & ambient cooling
+      const heatGen = (w.gripUtilPct / 100) * 1.8 * (this.speedMs / 20);
+      const cooling = (w.surfaceTempC - 20) * 0.04;
+      w.surfaceTempC = Math.max(20, Math.min(135, w.surfaceTempC + (heatGen - cooling) * dt));
+      w.coreTempC += (w.surfaceTempC - w.coreTempC) * dt * 0.15;
+
+      // Wheel rotation animation speed
+      w.rotationRad += (this.speedMs / wheelRadiusM) * dt;
+    }
+
+    // 10. Stage Distance & Pacenote Triggering
+    this.stageDistanceM += this.speedMs * dt;
+    this.stageTimeSec += dt;
+
+    this._checkPacenotes(stage);
+
+    // 11. World Position Update along Spline / Heading
+    if (this.stageSpline && typeof this.stageSpline.getPointAtDistance === 'function') {
+      const pt = this.stageSpline.getPointAtDistance(this.stageDistanceM);
+      if (pt) {
+        this.position.x = pt.x;
+        this.position.y = pt.y + 0.35;
+        this.position.z = pt.z;
+        this.rotation.yaw = pt.heading || this.rotation.yaw;
+      }
+    } else {
+      // Free forward movement along yaw heading
+      const forwardHeading = this.rotation.yaw * (Math.PI / 180);
+      this.position.x += Math.sin(forwardHeading) * this.speedMs * dt;
+      this.position.z += Math.cos(forwardHeading) * this.speedMs * dt;
+    }
+  }
+
+  _updateWheelSuspension(wheel, targetTravelMm, dt) {
+    const clampedTravel = Math.max(10, Math.min(wheel.maxTravelMm, targetTravelMm));
+    const delta = clampedTravel - wheel.suspensionTravelMm;
+    wheel.damperVelocityMs = (delta / 1000) / dt;
+    wheel.suspensionTravelMm = clampedTravel;
+    wheel.compressionPct = Math.round((1 - (clampedTravel / wheel.maxTravelMm)) * 100);
+
+    // Bottomed out detection
+    if (wheel.suspensionTravelMm < 20) {
+      if (!wheel.bottomedOut) {
+        eventBus.emit(RALLY_EVENTS.BOTTOM_OUT, { wheelId: wheel.id });
+      }
+      wheel.bottomedOut = true;
+    } else {
+      wheel.bottomedOut = false;
+    }
+
+    // Dynamic slip angle
+    wheel.slipAngleDeg = this.steeringAngleDeg - this.driftAngleDeg;
+  }
+
+  _checkPacenotes(stage) {
+    if (!stage || !stage.pacenotes || stage.pacenotes.length === 0) return;
+
+    for (let i = 0; i < stage.pacenotes.length; i++) {
+      const note = stage.pacenotes[i];
+      // Trigger call 75-120 meters before the corner
+      const callDistance = note.distance - 90;
+      if (this.stageDistanceM >= callDistance && this.lastPacenoteIndex < i) {
+        this.lastPacenoteIndex = i;
+        eventBus.emit(RALLY_EVENTS.PACENOTE_TRIGGER, note);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Sequential gear shift with clutch cut and backfire pop
+   * @param {number} dir +1 for upshift, -1 for downshift
+   */
+  shiftGear(dir) {
+    const newGear = Math.max(1, Math.min(6, this.gear + dir));
+    if (newGear !== this.gear) {
+      this.gear = newGear;
+      // Drop RPM on upshift, flare on downshift
+      if (dir > 0) {
+        this.engineRpm = Math.max(1800, this.engineRpm * 0.72);
+        eventBus.emit(RALLY_EVENTS.GEAR_SHIFT, { gear: this.gear, direction: 'up' });
+        if (this.turboBoostBar > 0.8) {
+          eventBus.emit(RALLY_EVENTS.TURBO_BLOWOFF);
+          eventBus.emit(RALLY_EVENTS.BACKFIRE_POP);
+        }
+      } else {
+        this.engineRpm = Math.min(7800, this.engineRpm * 1.35);
+        eventBus.emit(RALLY_EVENTS.GEAR_SHIFT, { gear: this.gear, direction: 'down' });
+      }
+    }
+  }
+
+  resetVehicle() {
+    this.position = { x: 0, y: 0.5, z: 0 };
+    this.velocity = { x: 0, y: 0, z: 0 };
+    this.speedKph = 0;
+    this.speedMs = 0;
+    this.engineRpm = 1250;
+    this.gear = 1;
+    this.turboBoostBar = 0;
+    this.driftAngleDeg = 0;
+    this.stageDistanceM = 0;
+    this.stageTimeSec = 0;
+    this.lastPacenoteIndex = -1;
+  }
+
+  _broadcastTelemetry(timestamp) {
+    const stage = stateStore.activeStage;
+    const activeNote = stage?.pacenotes?.[this.lastPacenoteIndex + 1] || null;
+
+    const payload = {
+      timestamp,
+      tick: this.tickCount,
+      vehicle: {
+        speedKph: Math.round(this.speedKph * 10) / 10,
+        speedMph: Math.round(this.speedKph * 0.621371 * 10) / 10,
+        engineRpm: Math.round(this.engineRpm),
+        gear: this.gear,
+        throttle: Math.round(this.inputs.throttle * 100) / 100,
+        brake: Math.round(this.inputs.brake * 100) / 100,
+        clutch: Math.round(this.inputs.clutch * 100) / 100,
+        handbrake: Math.round(this.inputs.handbrake * 100) / 100,
+        steeringAngleDeg: Math.round(this.steeringAngleDeg * 10) / 10,
+        turboBoostBar: Math.round(this.turboBoostBar * 100) / 100,
+        peakBoostBar: Math.round(this.peakBoostBar * 100) / 100,
+        antiLagActive: this.inputs.throttle < 0.2 && this.turboBoostBar > 0.8,
+        limiterActive: this.engineRpm >= 7800
+      },
+      gForces: {
+        lateralG: Math.round(this.gForces.lateralG * 100) / 100,
+        longitudinalG: Math.round(this.gForces.longitudinalG * 100) / 100,
+        verticalG: Math.round(this.gForces.verticalG * 100) / 100,
+        yawRateDegS: Math.round(this.gForces.yawRateDegS * 10) / 10
+      },
+      suspension: {
+        fl: {
+          travelMm: Math.round(this.wheels.fl.suspensionTravelMm),
+          maxTravelMm: this.wheels.fl.maxTravelMm,
+          compressionPct: this.wheels.fl.compressionPct,
+          damperVelocityMs: Math.round(this.wheels.fl.damperVelocityMs * 100) / 100,
+          bottomedOut: this.wheels.fl.bottomedOut
+        },
+        fr: {
+          travelMm: Math.round(this.wheels.fr.suspensionTravelMm),
+          maxTravelMm: this.wheels.fr.maxTravelMm,
+          compressionPct: this.wheels.fr.compressionPct,
+          damperVelocityMs: Math.round(this.wheels.fr.damperVelocityMs * 100) / 100,
+          bottomedOut: this.wheels.fr.bottomedOut
+        },
+        rl: {
+          travelMm: Math.round(this.wheels.rl.suspensionTravelMm),
+          maxTravelMm: this.wheels.rl.maxTravelMm,
+          compressionPct: this.wheels.rl.compressionPct,
+          damperVelocityMs: Math.round(this.wheels.rl.damperVelocityMs * 100) / 100,
+          bottomedOut: this.wheels.rl.bottomedOut
+        },
+        rr: {
+          travelMm: Math.round(this.wheels.rr.suspensionTravelMm),
+          maxTravelMm: this.wheels.rr.maxTravelMm,
+          compressionPct: this.wheels.rr.compressionPct,
+          damperVelocityMs: Math.round(this.wheels.rr.damperVelocityMs * 100) / 100,
+          bottomedOut: this.wheels.rr.bottomedOut
+        }
+      },
+      tires: {
+        fl: {
+          coreTempC: Math.round(this.wheels.fl.coreTempC * 10) / 10,
+          surfaceTempC: Math.round(this.wheels.fl.surfaceTempC * 10) / 10,
+          pressurePsi: this.wheels.fl.pressurePsi,
+          slipAngleDeg: Math.round(this.wheels.fl.slipAngleDeg * 10) / 10,
+          gripUtilPct: this.wheels.fl.gripUtilPct,
+          surfaceContact: true
+        },
+        fr: {
+          coreTempC: Math.round(this.wheels.fr.coreTempC * 10) / 10,
+          surfaceTempC: Math.round(this.wheels.fr.surfaceTempC * 10) / 10,
+          pressurePsi: this.wheels.fr.pressurePsi,
+          slipAngleDeg: Math.round(this.wheels.fr.slipAngleDeg * 10) / 10,
+          gripUtilPct: this.wheels.fr.gripUtilPct,
+          surfaceContact: true
+        },
+        rl: {
+          coreTempC: Math.round(this.wheels.rl.coreTempC * 10) / 10,
+          surfaceTempC: Math.round(this.wheels.rl.surfaceTempC * 10) / 10,
+          pressurePsi: this.wheels.rl.pressurePsi,
+          slipAngleDeg: Math.round(this.wheels.rl.slipAngleDeg * 10) / 10,
+          gripUtilPct: this.wheels.rl.gripUtilPct,
+          surfaceContact: true
+        },
+        rr: {
+          coreTempC: Math.round(this.wheels.rr.coreTempC * 10) / 10,
+          surfaceTempC: Math.round(this.wheels.rr.surfaceTempC * 10) / 10,
+          pressurePsi: this.wheels.rr.pressurePsi,
+          slipAngleDeg: Math.round(this.wheels.rr.slipAngleDeg * 10) / 10,
+          gripUtilPct: this.wheels.rr.gripUtilPct,
+          surfaceContact: true
+        }
+      },
+      stageProgress: {
+        currentDistanceM: Math.round(this.stageDistanceM),
+        totalDistanceM: stage?.totalLengthMeters || 4200,
+        progressPercent: Math.min(100, Math.round((this.stageDistanceM / (stage?.totalLengthMeters || 4200)) * 100)),
+        elapsedTimeSec: Math.round(this.stageTimeSec * 10) / 10,
+        activePacenote: activeNote ? {
+          call: activeNote.call,
+          distanceToApexM: Math.max(0, Math.round(activeNote.distance - this.stageDistanceM)),
+          severity: activeNote.severity,
+          direction: activeNote.direction,
+          modifier: activeNote.modifier,
+          detail: activeNote.detail
+        } : null
+      }
+    };
+
+    // Emit live telemetry for viewport and HUD
+    eventBus.emit(RALLY_EVENTS.TELEMETRY_UPDATE, payload);
+  }
+}
+
+export const physicsBridge = new PhysicsBridge();

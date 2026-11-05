@@ -1,0 +1,44 @@
+{
+  "$comment": "Layout is AWD | RWD | FWD. Ratios are dimensionless, torques N m, inertias kg m^2.",
+  "layout": "AWD",
+  "autoClutch": { "enabled": true, "engageStartRpm": 1800, "engageEndRpm": 3200, "speedStart": 1.0, "speedFull": 4.0 },
+  "clutch": {
+    "maxTorque": 900,
+    "kineticRatio": 0.92,
+    "biteStart": 0.15,
+    "biteEnd": 0.8,
+    "pedalResponseTime": 0.04,
+    "thermal": {
+      "heatCapacity": 2500, "coolingCoeff": 12, "coolingPerRadS": 0.02,
+      "fadeStartK": 520, "fadeEndK": 720, "fadeMin": 0.55
+    },
+    "wear": { "perJoule": 1.5e-8, "maxCapacityLoss": 0.45, "biteShift": 0.12 }
+  },
+  "transmission": {
+    "type": "sequential",
+    "gearRatios": [2.78, 1.95, 1.45, 1.13, 0.92],
+    "reverseRatio": 2.9,
+    "inertia": 0.04,
+    "efficiency": { "geared": 0.96, "directDrive": 0.98 },
+    "minShiftInterval": 0.05,
+    "reverseLockoutSpeed": 1.5,
+    "sequential": { "shiftTime": 0.045, "ignitionCutTime": 0.08, "autoBlip": true },
+    "hPattern": { "shiftTime": 0.25, "clutchRequired": 0.85, "grindWear": 0.02, "syncWearPerRadS": 2e-5, "syncTimePerRadS": 0.0004 },
+    "popOut": { "wearThreshold": 0.8, "holdTorque": 600 }
+  },
+  "finalDrive": { "front": 4.9, "rear": 4.9 },
+  "efficiency": { "finalDrive": 0.97 },
+  "centerDiff": {
+    "type": "lsd", "baseSplit": 0.4, "preload": 100,
+    "powerRampDeg": 45, "coastRampDeg": 70, "maxLockTorque": 600,
+    "pack": { "rampGain": 0.2 }
+  },
+  "frontDiff": {
+    "type": "lsd", "preload": 60, "powerRampDeg": 45, "coastRampDeg": 60,
+    "pack": { "mu": 0.12, "surfaces": 8, "meanRadius": 0.05, "rampRadius": 0.0686 }
+  },
+  "rearDiff": {
+    "type": "lsd", "preload": 80, "powerRampDeg": 45, "coastRampDeg": 60,
+    "pack": { "mu": 0.12, "surfaces": 8, "meanRadius": 0.05, "rampRadius": 0.0686 }
+  }
+}

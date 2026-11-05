@@ -1,0 +1,230 @@
+{
+  "$comment": "Tyre compounds. Temperatures in K, pressures in kPa (gauge), stiffness values are per unit load: Fx/Fz per unit slip ratio and Fy/Fz per unit tan(alpha) at nominal load.",
+  "compounds": {
+    "rally_gravel_15": {
+      "model": "pacejka",
+      "radius": 0.318,
+      "width": 0.205,
+      "mass": 9.5,
+      "wheelInertia": 1.35,
+      "nominalLoad": 4000,
+      "nominalPressureKPa": 160,
+      "optimalPressureKPa": 165,
+      "verticalStiffness": 230000,
+      "verticalDamping": 1100,
+      "bottomOutDeflection": 0.045,
+      "relaxationLength": 0.35,
+      "minSpeed": 1.5,
+      "slipClamp": 4,
+      "mu0": 1.25,
+      "muRatioY": 0.97,
+      "loadSensitivity": 0.12,
+      "stiffness": {
+        "longitudinal": 20,
+        "lateral": 13,
+        "peakLoadRatio": 1.4
+      },
+      "pacejka": {
+        "Ex": -0.3,
+        "Ey": -0.8,
+        "shapeMin": 1.05
+      },
+      "brush": {
+        "stribeckSpeed": 1.5
+      },
+      "camberStiffnessRatio": 0.06,
+      "pneumaticTrail": 0.035,
+      "rollingResistance": 1.0,
+      "rollingSpeedCoeff": 2e-06,
+      "temperature": {
+        "optimalK": 345,
+        "coldWidth": 38,
+        "hotWidth": 55,
+        "minGrip": 0.72,
+        "stiffnessSens": 0.12
+      },
+      "pressure": {
+        "gripQuad": 1.6,
+        "stiffnessSens": 0.8
+      },
+      "surfaceGrip": {
+        "tarmac": 0.82,
+        "wet_tarmac": 0.85,
+        "dirt": 1.05,
+        "gravel": 1.08,
+        "mud": 1.0,
+        "snow": 0.9,
+        "ice": 0.7
+      },
+      "thermal": {
+        "surfaceHeatCapacity": 1500,
+        "coreHeatCapacity": 8000,
+        "surfaceCoreConductance": 250,
+        "surfaceArea": 0.45,
+        "coreArea": 0.6,
+        "coreConvectionRatio": 0.6,
+        "convection0": 20,
+        "convection1": 3.0,
+        "roadConductance": 30,
+        "slipHeatFraction": 0.55,
+        "surfacePartition": 0.6,
+        "hysteresisFraction": 0.7
+      },
+      "wear": {
+        "energyToWorn": 60000000.0,
+        "gripLoss": 0.35,
+        "overheatMarginK": 25
+      }
+    },
+    "rally_tarmac_18": {
+      "model": "pacejka",
+      "radius": 0.327,
+      "width": 0.235,
+      "mass": 10.5,
+      "wheelInertia": 1.5,
+      "nominalLoad": 4000,
+      "nominalPressureKPa": 190,
+      "optimalPressureKPa": 195,
+      "verticalStiffness": 270000,
+      "verticalDamping": 1200,
+      "bottomOutDeflection": 0.04,
+      "relaxationLength": 0.3,
+      "minSpeed": 1.5,
+      "slipClamp": 4,
+      "mu0": 1.55,
+      "muRatioY": 1.0,
+      "loadSensitivity": 0.15,
+      "stiffness": {
+        "longitudinal": 24,
+        "lateral": 16,
+        "peakLoadRatio": 1.4
+      },
+      "pacejka": {
+        "Ex": -0.4,
+        "Ey": -1.0,
+        "shapeMin": 1.05
+      },
+      "brush": {
+        "stribeckSpeed": 1.5
+      },
+      "camberStiffnessRatio": 0.07,
+      "pneumaticTrail": 0.04,
+      "rollingResistance": 0.9,
+      "rollingSpeedCoeff": 2e-06,
+      "temperature": {
+        "optimalK": 345,
+        "coldWidth": 35,
+        "hotWidth": 50,
+        "minGrip": 0.68,
+        "stiffnessSens": 0.12
+      },
+      "pressure": {
+        "gripQuad": 1.8,
+        "stiffnessSens": 0.8
+      },
+      "surfaceGrip": {
+        "tarmac": 1.0,
+        "wet_tarmac": 0.9,
+        "dirt": 0.7,
+        "gravel": 0.6,
+        "mud": 0.55,
+        "snow": 0.5,
+        "ice": 0.55
+      },
+      "thermal": {
+        "surfaceHeatCapacity": 1500,
+        "coreHeatCapacity": 8000,
+        "surfaceCoreConductance": 250,
+        "surfaceArea": 0.45,
+        "coreArea": 0.6,
+        "coreConvectionRatio": 0.6,
+        "convection0": 20,
+        "convection1": 3.0,
+        "roadConductance": 30,
+        "slipHeatFraction": 0.55,
+        "surfacePartition": 0.6,
+        "hysteresisFraction": 0.7
+      },
+      "wear": {
+        "energyToWorn": 40000000.0,
+        "gripLoss": 0.4,
+        "overheatMarginK": 20
+      }
+    },
+    "rally_snow_studded_15": {
+      "model": "brush",
+      "radius": 0.318,
+      "width": 0.195,
+      "mass": 9.8,
+      "wheelInertia": 1.4,
+      "nominalLoad": 4000,
+      "nominalPressureKPa": 140,
+      "optimalPressureKPa": 130,
+      "verticalStiffness": 215000,
+      "verticalDamping": 1050,
+      "bottomOutDeflection": 0.05,
+      "relaxationLength": 0.38,
+      "minSpeed": 1.5,
+      "slipClamp": 4,
+      "mu0": 1.15,
+      "muRatioY": 0.95,
+      "loadSensitivity": 0.1,
+      "stiffness": {
+        "longitudinal": 18,
+        "lateral": 12,
+        "peakLoadRatio": 1.4
+      },
+      "pacejka": {
+        "Ex": -0.3,
+        "Ey": -0.8,
+        "shapeMin": 1.05
+      },
+      "brush": {
+        "stribeckSpeed": 2.0
+      },
+      "camberStiffnessRatio": 0.05,
+      "pneumaticTrail": 0.03,
+      "rollingResistance": 1.1,
+      "rollingSpeedCoeff": 2e-06,
+      "temperature": {
+        "optimalK": 303,
+        "coldWidth": 45,
+        "hotWidth": 40,
+        "minGrip": 0.85,
+        "stiffnessSens": 0.08
+      },
+      "pressure": {
+        "gripQuad": 1.0,
+        "stiffnessSens": 0.8
+      },
+      "surfaceGrip": {
+        "tarmac": 0.55,
+        "wet_tarmac": 0.6,
+        "dirt": 0.9,
+        "gravel": 0.9,
+        "mud": 0.9,
+        "snow": 1.35,
+        "ice": 2.4
+      },
+      "thermal": {
+        "surfaceHeatCapacity": 1500,
+        "coreHeatCapacity": 8000,
+        "surfaceCoreConductance": 250,
+        "surfaceArea": 0.45,
+        "coreArea": 0.6,
+        "coreConvectionRatio": 0.6,
+        "convection0": 20,
+        "convection1": 3.0,
+        "roadConductance": 30,
+        "slipHeatFraction": 0.55,
+        "surfacePartition": 0.6,
+        "hysteresisFraction": 0.7
+      },
+      "wear": {
+        "energyToWorn": 50000000.0,
+        "gripLoss": 0.3,
+        "overheatMarginK": 25
+      }
+    }
+  }
+}

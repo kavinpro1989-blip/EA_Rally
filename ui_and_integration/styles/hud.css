@@ -1,0 +1,585 @@
+/**
+ * @file /ui_and_integration/styles/hud.css
+ * @description Real-Time Pro-Telemetry HUD Overlay, Tachometer Shift LEDs, Tire Heatmap, and AI Co-Driver Styles.
+ * Lead Frontend & Three.js 3D Viewport Engineer - EA Rally Integration
+ */
+
+.telemetry-hud-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.telemetry-hud-root * {
+  pointer-events: auto;
+}
+
+/* Glass HUD Panels */
+.glass-hud-panel {
+  background: rgba(10, 16, 24, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+}
+
+.glass-hud-subpanel {
+  background: rgba(14, 22, 32, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.hud-subpanel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--rally-text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.hud-unit {
+  font-family: var(--font-mono);
+  color: var(--rally-cyan);
+}
+
+/* Top Center: AI Co-Driver Overlay */
+.hud-top-center {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  z-index: 30;
+}
+
+.co-driver-container {
+  display: flex;
+  justify-content: center;
+}
+
+.pacenote-card {
+  background: rgba(10, 14, 20, 0.92);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75);
+  min-width: 320px;
+  transition: opacity 0.3s ease;
+}
+
+.pacenote-card.note-pop {
+  animation: note-pop-anim 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes note-pop-anim {
+  0% { transform: scale(0.85); opacity: 0.5; }
+  100% { transform: scale(1.0); opacity: 1.0; }
+}
+
+.pacenote-icon-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--rally-green);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.pacenote-svg {
+  width: 44px;
+  height: 44px;
+}
+
+.pacenote-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pacenote-callout {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.pacenote-detail-sub {
+  font-size: 11px;
+  color: var(--rally-text-muted);
+}
+
+.pacenote-countdown-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.pacenote-countdown-fill {
+  height: 100%;
+  background: #ffffff;
+  width: 100%;
+  transition: width 0.08s linear;
+}
+
+.pacenote-distance-badge {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  border: 1px solid var(--rally-green);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* Top Left: Stage Progress */
+.stage-progress-panel {
+  position: absolute;
+  top: 64px;
+  left: 24px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stage-name-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stage-time-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--rally-gold);
+}
+
+.stage-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.stage-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--rally-red);
+  box-shadow: 0 0 6px var(--rally-red-glow);
+}
+
+.stage-dist-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--rally-text-muted);
+}
+
+/* Top Right: Camera Pill */
+.hud-top-right {
+  position: absolute;
+  top: 64px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.camera-mode-pill {
+  background: rgba(14, 20, 28, 0.85);
+  border: 1px solid var(--rally-panel-border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rally-cyan);
+}
+
+.hud-icon-btn {
+  background: rgba(14, 20, 28, 0.85);
+  border: 1px solid var(--rally-panel-border);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Bottom Left: 4-Corner Cluster */
+.telemetry-corner-cluster {
+  position: absolute;
+  bottom: 38px;
+  left: 24px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Suspension Travel Bars */
+.suspension-corners-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  height: 95px;
+}
+
+.corner-meter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  height: 100%;
+}
+
+.corner-label {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--rally-text-muted);
+}
+
+.bar-track {
+  flex: 1;
+  width: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar-fill {
+  width: 100%;
+  height: 50%;
+  background: var(--rally-green);
+  transition: height 0.05s linear;
+}
+
+.bottom-out-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #ff1744;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.corner-val {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #ffffff;
+}
+
+/* Tire Heatmap Grid */
+.tire-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.tire-cell {
+  background: rgba(10, 14, 20, 0.7);
+  border: 2px solid var(--rally-green);
+  border-radius: 4px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.2s ease;
+}
+
+.tire-id {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--rally-text-muted);
+}
+
+.tire-temp {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.tire-psi, .tire-slip {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--rally-text-muted);
+}
+
+/* Bottom Right: Dashboard Cluster */
+.telemetry-dash-cluster {
+  position: absolute;
+  bottom: 38px;
+  right: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.g-meter-subpanel {
+  width: 125px;
+  height: 145px;
+  display: flex;
+  flex-direction: column;
+}
+
+.g-force-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Boost Gauge */
+.boost-subpanel {
+  width: 110px;
+  height: 145px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boost-gauge-visual {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.boost-arc-track {
+  width: 70px;
+  height: 70px;
+  border: 4px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--rally-cyan);
+  border-right-color: var(--rally-gold);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boost-needle {
+  width: 2px;
+  height: 28px;
+  background: var(--rally-red);
+  position: absolute;
+  bottom: 50%;
+  transform-origin: bottom center;
+  transform: rotate(-90deg);
+  transition: transform 0.05s linear;
+  box-shadow: 0 0 6px var(--rally-red);
+}
+
+.boost-digital-val {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.boost-digital-val .unit {
+  font-size: 10px;
+  color: var(--rally-cyan);
+}
+
+.boost-peak {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--rally-text-muted);
+}
+
+/* Master Cluster */
+.master-cluster {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shift-lights-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.shift-led {
+  width: 16px;
+  height: 8px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.1s ease;
+}
+
+.shift-led.green.lit { background: #00e676; box-shadow: 0 0 8px #00e676; }
+.shift-led.yellow.lit { background: #ffd600; box-shadow: 0 0 8px #ffd600; }
+.shift-led.red.lit { background: #ff1744; box-shadow: 0 0 10px #ff1744; }
+
+.cluster-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.gear-display-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gear-label {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--rally-text-muted);
+}
+
+.gear-val {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--rally-red);
+  text-shadow: 0 0 16px var(--rally-red-glow);
+}
+
+.speed-display-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.speed-val {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.speed-unit {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--rally-cyan);
+  letter-spacing: 1px;
+}
+
+/* RPM Progress Bar */
+.rpm-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rpm-bar-fill {
+  height: 6px;
+  background: var(--rally-green);
+  border-radius: 3px;
+  width: 15%;
+  transition: width 0.05s linear;
+}
+
+.rpm-text-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--rally-text-muted);
+}
+
+.rpm-text-row .redline {
+  color: var(--rally-red);
+  font-weight: 700;
+}
+
+/* Pedals */
+.pedal-inputs-row {
+  display: flex;
+  gap: 8px;
+  height: 24px;
+  margin-top: 2px;
+}
+
+.pedal-bar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.pedal-bar div {
+  width: 100%;
+  height: 0%;
+  transition: height 0.04s linear;
+}
+
+.pedal-bar.throttle div { background: var(--rally-green); }
+.pedal-bar.brake div { background: var(--rally-red); }
+.pedal-bar.handbrake div { background: var(--rally-gold); }
+
+/* Hotkey Tips Bar */
+.hotkey-tips-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  background: rgba(8, 12, 18, 0.85);
+  border: 1px solid var(--rally-panel-border);
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--rally-text-muted);
+  white-space: nowrap;
+}
+
+.hotkey-tips-bar strong {
+  color: #ffffff;
+}

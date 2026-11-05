@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EA Rally Vehicle Tuning & Mechanical Specification",
+  "description": "Defines vehicle physics tuning, drivetrain differential locks, suspension kinematics, and visual aero specs for the EA Rally engine.",
+  "version": "2.4.0",
+  "activeProfile": "asphalt_monte_carlo",
+  "currentTuning": {
+    "suspension": {
+      "frontSpringRate": 95,
+      "rearSpringRate": 85,
+      "frontRideHeight": 140,
+      "rearRideHeight": 150,
+      "frontBumpDamping": 4200,
+      "rearBumpDamping": 3800,
+      "frontReboundDamping": 5800,
+      "rearReboundDamping": 5200,
+      "frontFastBumpDamping": 2100,
+      "rearFastBumpDamping": 1900,
+      "frontAntiRollBar": 48,
+      "rearAntiRollBar": 38,
+      "frontCamberDeg": -2.8,
+      "rearCamberDeg": -1.8,
+      "frontToeDeg": -0.15,
+      "rearToeDeg": 0.1
+    },
+    "differential": {
+      "type": "mechanical_plate_limited_slip",
+      "frontAccelLock": 55,
+      "frontDecelLock": 25,
+      "frontPreloadNm": 65,
+      "centerTorqueSplitFront": 42,
+      "centerTorqueSplitRear": 58,
+      "centerLockRatio": 45,
+      "rearAccelLock": 75,
+      "rearDecelLock": 40,
+      "rearPreloadNm": 90
+    },
+    "transmission": {
+      "type": "sequential_6_speed",
+      "gearRatios": [3.45, 2.38, 1.76, 1.35, 1.08, 0.89],
+      "reverseRatio": 3.65,
+      "finalDriveRatio": 4.18,
+      "shiftTimeMs": 42,
+      "clutchFrictionTorque": 880
+    },
+    "engine": {
+      "displacementLiters": 1.6,
+      "cylinders": 4,
+      "aspiration": "turbocharged_intercooled",
+      "peakPowerBhp": 385,
+      "peakTorqueNm": 520,
+      "maxRpm": 8400,
+      "idleRpm": 1250,
+      "redlineRpm": 7800,
+      "peakBoostBar": 2.45,
+      "antiLagSystem": "aggressive",
+      "revLimiter": "ign_cut_spark"
+    },
+    "tires_and_brakes": {
+      "tireCompound": "soft_tarmac",
+      "frontTirePressurePsi": 27.5,
+      "rearTirePressurePsi": 26.0,
+      "brakeBiasFrontPercent": 63.5,
+      "maxBrakeTorqueNm": 3800,
+      "handbrakeTorqueNm": 4600
+    },
+    "visual_parts": {
+      "aeroKit": "wrc_spec_high_downforce",
+      "lightPods": "quad_hella_hood",
+      "mudflaps": "rally_red",
+      "liveryPreset": "wrc_red",
+      "bodyColor": "#e10600",
+      "secondaryColor": "#141414",
+      "accentColor": "#ffffff",
+      "rimColor": "#f0f0f0",
+      "brakeCaliperColor": "#ff1a1a",
+      "paintFinish": "gloss_racing"
+    }
+  },
+  "presets": {
+    "asphalt_monte_carlo": {
+      "name": "Monte Carlo Asphalt High-Grip",
+      "description": "Stiff anti-roll bars, low ride height, high negative camber and aggressive front brake bias for tarmac hairpin stages.",
+      "suspension": {
+        "frontSpringRate": 110,
+        "rearSpringRate": 98,
+        "frontRideHeight": 115,
+        "rearRideHeight": 125,
+        "frontBumpDamping": 4800,
+        "rearBumpDamping": 4400,
+        "frontReboundDamping": 6400,
+        "rearReboundDamping": 5900,
+        "frontFastBumpDamping": 2400,
+        "rearFastBumpDamping": 2200,
+        "frontAntiRollBar": 56,
+        "rearAntiRollBar": 46,
+        "frontCamberDeg": -3.2,
+        "rearCamberDeg": -2.2,
+        "frontToeDeg": -0.2,
+        "rearToeDeg": 0.12
+      },
+      "differential": {
+        "frontAccelLock": 50,
+        "frontDecelLock": 20,
+        "frontPreloadNm": 50,
+        "centerTorqueSplitFront": 45,
+        "centerTorqueSplitRear": 55,
+        "centerLockRatio": 40,
+        "rearAccelLock": 70,
+        "rearDecelLock": 35,
+        "rearPreloadNm": 80
+      },
+      "tires_and_brakes": {
+        "tireCompound": "soft_tarmac",
+        "frontTirePressurePsi": 28.5,
+        "rearTirePressurePsi": 27.0,
+        "brakeBiasFrontPercent": 64.0,
+        "maxBrakeTorqueNm": 4100,
+        "handbrakeTorqueNm": 4800
+      },
+      "visual_parts": {
+        "aeroKit": "wrc_spec_high_downforce",
+        "lightPods": "clean_stock",
+        "mudflaps": "none",
+        "liveryPreset": "wrc_red"
+      }
+    },
+    "gravel_finland_jumps": {
+      "name": "Finland High-Speed Rollercoaster",
+      "description": "High ride height, long travel, progressive rebound damping to soak up mega crest landings and yumps at 190 km/h.",
+      "suspension": {
+        "frontSpringRate": 72,
+        "rearSpringRate": 64,
+        "frontRideHeight": 175,
+        "rearRideHeight": 185,
+        "frontBumpDamping": 3600,
+        "rearBumpDamping": 3300,
+        "frontReboundDamping": 6800,
+        "rearReboundDamping": 6300,
+        "frontFastBumpDamping": 1700,
+        "rearFastBumpDamping": 1550,
+        "frontAntiRollBar": 34,
+        "rearAntiRollBar": 26,
+        "frontCamberDeg": -1.8,
+        "rearCamberDeg": -1.2,
+        "frontToeDeg": -0.08,
+        "rearToeDeg": 0.05
+      },
+      "differential": {
+        "frontAccelLock": 65,
+        "frontDecelLock": 35,
+        "frontPreloadNm": 80,
+        "centerTorqueSplitFront": 40,
+        "centerTorqueSplitRear": 60,
+        "centerLockRatio": 60,
+        "rearAccelLock": 85,
+        "rearDecelLock": 50,
+        "rearPreloadNm": 110
+      },
+      "tires_and_brakes": {
+        "tireCompound": "gravel_rough",
+        "frontTirePressurePsi": 24.5,
+        "rearTirePressurePsi": 23.5,
+        "brakeBiasFrontPercent": 59.0,
+        "maxBrakeTorqueNm": 3600,
+        "handbrakeTorqueNm": 4700
+      },
+      "visual_parts": {
+        "aeroKit": "group_b_big_wing",
+        "lightPods": "clean_stock",
+        "mudflaps": "rally_red",
+        "liveryPreset": "mud_camo"
+      }
+    },
+    "acropolis_rocky_gravel": {
+      "name": "Acropolis Rough Boulder Endurance",
+      "description": "Reinforced spring rates, high fast-bump damping, thick mudflaps, and heavy locking diffs to withstand jagged rock tracks.",
+      "suspension": {
+        "frontSpringRate": 85,
+        "rearSpringRate": 78,
+        "frontRideHeight": 190,
+        "rearRideHeight": 200,
+        "frontBumpDamping": 4100,
+        "rearBumpDamping": 3900,
+        "frontReboundDamping": 5900,
+        "rearReboundDamping": 5500,
+        "frontFastBumpDamping": 2600,
+        "rearFastBumpDamping": 2400,
+        "frontAntiRollBar": 38,
+        "rearAntiRollBar": 30,
+        "frontCamberDeg": -2.0,
+        "rearCamberDeg": -1.4,
+        "frontToeDeg": -0.1,
+        "rearToeDeg": 0.08
+      },
+      "differential": {
+        "frontAccelLock": 70,
+        "frontDecelLock": 40,
+        "frontPreloadNm": 95,
+        "centerTorqueSplitFront": 38,
+        "centerTorqueSplitRear": 62,
+        "centerLockRatio": 65,
+        "rearAccelLock": 88,
+        "rearDecelLock": 55,
+        "rearPreloadNm": 120
+      },
+      "tires_and_brakes": {
+        "tireCompound": "gravel_rough",
+        "frontTirePressurePsi": 25.0,
+        "rearTirePressurePsi": 24.0,
+        "brakeBiasFrontPercent": 60.5,
+        "maxBrakeTorqueNm": 3700,
+        "handbrakeTorqueNm": 4900
+      },
+      "visual_parts": {
+        "aeroKit": "gravel_clubman",
+        "lightPods": "quad_hella_hood",
+        "mudflaps": "neon_yellow",
+        "liveryPreset": "retro_apex"
+      }
+    },
+    "monte_carlo_night_ice": {
+      "name": "Col de Turini Night & Black Ice",
+      "description": "Quad high-beam roof & hood light pods, softened anti-roll bars, studded winter compounds, and balanced center differential.",
+      "suspension": {
+        "frontSpringRate": 80,
+        "rearSpringRate": 72,
+        "frontRideHeight": 135,
+        "rearRideHeight": 145,
+        "frontBumpDamping": 3800,
+        "rearBumpDamping": 3500,
+        "frontReboundDamping": 5200,
+        "rearReboundDamping": 4800,
+        "frontFastBumpDamping": 2000,
+        "rearFastBumpDamping": 1800,
+        "frontAntiRollBar": 36,
+        "rearAntiRollBar": 28,
+        "frontCamberDeg": -2.2,
+        "rearCamberDeg": -1.5,
+        "frontToeDeg": -0.05,
+        "rearToeDeg": 0.05
+      },
+      "differential": {
+        "frontAccelLock": 45,
+        "frontDecelLock": 25,
+        "frontPreloadNm": 60,
+        "centerTorqueSplitFront": 50,
+        "centerTorqueSplitRear": 50,
+        "centerLockRatio": 50,
+        "rearAccelLock": 60,
+        "rearDecelLock": 35,
+        "rearPreloadNm": 75
+      },
+      "tires_and_brakes": {
+        "tireCompound": "snow_studded",
+        "frontTirePressurePsi": 26.0,
+        "rearTirePressurePsi": 25.0,
+        "brakeBiasFrontPercent": 57.0,
+        "maxBrakeTorqueNm": 3200,
+        "handbrakeTorqueNm": 4400
+      },
+      "visual_parts": {
+        "aeroKit": "wrc_spec_high_downforce",
+        "lightPods": "quad_hella_hood",
+        "mudflaps": "stealth_black",
+        "liveryPreset": "stealth_carbon"
+      }
+    }
+  }
+}

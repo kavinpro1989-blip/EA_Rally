@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EA Rally - 3D Viewport, Stage Planner & Garage Tuning Studio</title>
+  <script type="module" crossorigin src="/assets/index-Cv4YWty3.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CR-VRy23.css">
+</head>
+<body>
+  <div id="appRoot">
+    <!-- Top Navigation Bar -->
+    <header class="rally-topbar">
+      <div class="brand-section">
+        <div class="brand-logo-text">
+          <span>EA RALLY</span>
+          <span class="badge-wrc">WRC SPEC</span>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <nav class="mode-nav-tabs">
+        <button class="nav-tab-btn active" data-tab="stage_drive">
+          <span>🏎️ Stage Drive</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="garage_studio">
+          <span>🔧 3D Garage Studio</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="stage_planner">
+          <span>📍 Stage Picker & GPS</span>
+        </button>
+      </nav>
+
+      <div class="topbar-right-controls">
+        <button id="btnAudioToggle" class="audio-toggle-btn">
+          <span id="audioIcon">🔊</span>
+          <span id="audioLabel">AUDIO ACTIVE</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. Three.js 3D Viewport Canvas Container -->
+    <main id="viewportContainer" class="viewport-canvas-container">
+      <div class="viewport-floating-controls">
+        <div class="camera-selector-group">
+          <button class="cam-btn active" data-cam="chase">CHASE (C)</button>
+          <button class="cam-btn" data-cam="onboard">ONBOARD</button>
+          <button class="cam-btn" data-cam="helicopter">HELI DRONE</button>
+        </div>
+      </div>
+      <div class="controls-legend-card glass-hud-subpanel">
+        <div class="legend-header">🎮 RALLY DRIVER CONTROLS</div>
+        <div class="legend-grid">
+          <div><kbd>W</kbd>/<kbd>↑</kbd> Throttle</div>
+          <div><kbd>S</kbd>/<kbd>↓</kbd> Brake / Rev</div>
+          <div><kbd>A</kbd><kbd>D</kbd>/<kbd>←</kbd><kbd>→</kbd> Steer</div>
+          <div><kbd>SPACE</kbd> Handbrake</div>
+          <div><kbd>Q</kbd>/<kbd>E</kbd> Shift Down/Up</div>
+          <div><kbd>C</kbd> Camera Mode</div>
+          <div><kbd>M</kbd> Manual/Auto</div>
+          <div><kbd>R</kbd> Reset Vehicle</div>
+          <div><kbd>T</kbd> Toggle HUD</div>
+          <div><kbd>G</kbd> Tuning Studio</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 2. Interactive Google Maps Stage Picker Overlay -->
+    <section id="stagePickerMount" class="stage-picker-overlay" style="display: none;"></section>
+
+    <!-- 3. 3D Garage Mechanical Tuning Studio Overlay -->
+    <section id="garageStudioMount" class="garage-studio-overlay" style="display: none;"></section>
+
+    <!-- 4. Real-Time Pro Telemetry HUD & AI Co-Driver Overlay -->
+    <aside id="telemetryHudMount"></aside>
+
+    <!-- Global Toast Alert -->
+    <div id="rallyToast" class="rally-toast">
+      <span class="toast-title" id="toastTitle">NOTIFICATION</span>
+      <span class="toast-msg" id="toastMsg">Ready</span>
+    </div>
+  </div>
+
+</body>
+</html>

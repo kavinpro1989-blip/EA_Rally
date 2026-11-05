@@ -1,0 +1,408 @@
+/**
+ * @file /ui_and_integration/styles/garage.css
+ * @description 3D Garage Mechanical Tuning Studio, Sliders, Dyno Chart, and Part Customizer Styles.
+ * Lead Frontend & Three.js 3D Viewport Engineer - EA Rally Integration
+ */
+
+.garage-studio-overlay {
+  position: absolute;
+  top: 64px;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  pointer-events: auto;
+}
+
+.tuning-studio-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.studio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rally-panel-border);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.studio-header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.studio-header h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.studio-header .header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Preset Quick Bar */
+.tuning-presets-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 20, 28, 0.65);
+  border: 1px solid var(--rally-panel-border);
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.tuning-presets-bar .bar-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--rally-text-muted);
+  letter-spacing: 1px;
+}
+
+.preset-pill-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #dddddd;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.preset-pill.active {
+  background: var(--rally-red);
+  border-color: #ff3333;
+  color: #ffffff;
+  box-shadow: 0 0 10px var(--rally-red-glow);
+}
+
+/* 2-Column Studio Grid */
+.tuning-studio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Mechanical Sliders Panel */
+.mechanical-sliders-panel {
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 26, 36, 0.65);
+  border: 1px solid var(--rally-panel-border);
+  border-radius: 8px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.tuning-subtabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--rally-panel-border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.subtab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--rally-text-muted);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.subtab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.subtab-btn.active {
+  background: rgba(225, 6, 0, 0.2);
+  color: #ffffff;
+  border-bottom: 2px solid var(--rally-red);
+}
+
+.tuning-tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.tuning-tab-content.active {
+  display: flex;
+}
+
+/* Sliders */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.slider-val {
+  font-family: var(--font-mono);
+  color: var(--rally-cyan);
+}
+
+.rally-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #1e293b;
+  border-radius: 3px;
+  outline: none;
+}
+
+.rally-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--rally-red);
+  cursor: pointer;
+  box-shadow: 0 0 6px var(--rally-red-glow);
+  transition: transform 0.1s ease;
+}
+
+.rally-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Transmission Dyno */
+.dyno-mount-wrapper {
+  height: 160px;
+  background: #111822;
+  border-radius: 6px;
+  border: 1px solid var(--rally-panel-border);
+  padding: 8px;
+}
+
+.dyno-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gear-sliders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.slider-group-small {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(10, 14, 20, 0.6);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.slider-group-small strong {
+  font-family: var(--font-mono);
+  color: var(--rally-cyan);
+}
+
+.rally-slider-gear {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--rally-red);
+}
+
+/* Visual Part Customizer Panel */
+.part-customizer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.customizer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--rally-text-muted);
+  text-transform: uppercase;
+}
+
+.part-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.part-toggle-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.part-option-btn {
+  background: rgba(10, 14, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cccccc;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: var(--font-display);
+  transition: all 0.2s ease;
+}
+
+.part-option-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.part-option-btn.active {
+  background: rgba(225, 6, 0, 0.2);
+  border-color: var(--rally-red);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(225, 6, 0, 0.35);
+}
+
+.btn-name {
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.btn-sub {
+  font-size: 9px;
+  color: var(--rally-text-muted);
+}
+
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-bottom: 2px;
+}
+.color-dot.red { background: #d32f2f; }
+.color-dot.yellow { background: #c6ff00; }
+.color-dot.black { background: #222222; border: 1px solid #444; }
+
+/* Livery Cards */
+.livery-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.livery-card {
+  background: rgba(10, 14, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.livery-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.livery-card.active {
+  border-color: var(--rally-red);
+  box-shadow: 0 0 14px var(--rally-red-glow);
+}
+
+.livery-thumb {
+  width: 100%;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+}
+
+.livery-info {
+  padding: 8px;
+}
+
+.livery-info h4 {
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.livery-info p {
+  font-size: 9px;
+  color: var(--rally-text-muted);
+}
+
+.color-pickers-row {
+  display: flex;
+  gap: 16px;
+}
+
+.color-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.color-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--rally-panel-border);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}

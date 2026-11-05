@@ -1,0 +1,190 @@
+{
+  "$comment": "Body frame: +X forward, +Y up, +Z right, origin at the sprung centre of gravity. Spring/damper values are at the spring/damper; wheel rates = value * motionRatio^2.",
+  "mass": 1290,
+  "frontWeightFraction": 0.54,
+  "wheelbase": 2.53,
+  "trackFront": 1.55,
+  "trackRear": 1.55,
+  "cgHeight": 0.46,
+  "inertia": {
+    "roll": 430,
+    "yaw": 1900,
+    "pitch": 1950
+  },
+  "unsprungMass": {
+    "front": 30,
+    "rear": 32
+  },
+  "tires": {
+    "front": "rally_gravel_15",
+    "rear": "rally_gravel_15",
+    "pressureKPa": {
+      "front": 160,
+      "rear": 160
+    }
+  },
+  "steering": {
+    "maxWheelAngleDeg": 32,
+    "ackermann": 0.6,
+    "rate": 2.5,
+    "speedReduction": 0.5,
+    "speedReductionRef": 45
+  },
+  "suspension": {
+    "front": {
+      "springRate": 52000,
+      "motionRatio": 0.85,
+      "preload": 0,
+      "travel": 0.22,
+      "helper": {
+        "rate": 15000,
+        "bindTravel": 0.025
+      },
+      "damper": {
+        "bumpSlow": 4150,
+        "bumpFast": 1660,
+        "reboundSlow": 6920,
+        "reboundFast": 2770,
+        "kneeVelocityBump": 0.08,
+        "kneeVelocityRebound": 0.1
+      },
+      "bumpStop": {
+        "length": 0.05,
+        "rate": 60000,
+        "progressive": 3000000,
+        "damping": 6000
+      },
+      "antiRollBar": {
+        "stiffness": 900,
+        "armLength": 0.25
+      },
+      "staticCamberDeg": -1.8,
+      "camberGainDegPerM": -10,
+      "staticToeDeg": 0.05,
+      "toeBumpSteerDegPerM": 0,
+      "endStopDamping": 15000
+    },
+    "rear": {
+      "springRate": 46000,
+      "motionRatio": 0.85,
+      "preload": 0,
+      "travel": 0.23,
+      "helper": {
+        "rate": 15000,
+        "bindTravel": 0.025
+      },
+      "damper": {
+        "bumpSlow": 3800,
+        "bumpFast": 1500,
+        "reboundSlow": 6500,
+        "reboundFast": 2600,
+        "kneeVelocityBump": 0.08,
+        "kneeVelocityRebound": 0.1
+      },
+      "bumpStop": {
+        "length": 0.05,
+        "rate": 60000,
+        "progressive": 3000000,
+        "damping": 6000
+      },
+      "antiRollBar": {
+        "stiffness": 500,
+        "armLength": 0.25
+      },
+      "staticCamberDeg": -1.2,
+      "camberGainDegPerM": -8,
+      "staticToeDeg": 0.2,
+      "toeBumpSteerDegPerM": 0,
+      "endStopDamping": 15000
+    }
+  },
+  "aero": {
+    "dragArea": 0.8,
+    "sideArea": 3.0,
+    "liftArea": 0.35,
+    "downforceBalance": 0.45,
+    "dragHeight": 0.1
+  },
+  "underbody": {
+    "frontX": 0.7,
+    "rearX": -0.7,
+    "groundClearance": 0.17,
+    "stiffness": 150000,
+    "damping": 4000,
+    "friction": 0.5
+  },
+  "brakes": {
+    "maxTorqueFront": 3800,
+    "maxTorqueRear": 2400,
+    "handbrakeTorqueRear": 3000,
+    "frontBias": 0.62
+  },
+  "hull": {
+    "stiffness": 400000,
+    "damping": 9000,
+    "friction": 0.6,
+    "points": [
+      {
+        "name": "bumperFrontLeft",
+        "zone": "front",
+        "x": 2.0,
+        "y": -0.05,
+        "z": -0.8
+      },
+      {
+        "name": "bumperFrontRight",
+        "zone": "front",
+        "x": 2.0,
+        "y": -0.05,
+        "z": 0.8
+      },
+      {
+        "name": "bumperRearLeft",
+        "zone": "rear",
+        "x": -2.0,
+        "y": -0.05,
+        "z": -0.8
+      },
+      {
+        "name": "bumperRearRight",
+        "zone": "rear",
+        "x": -2.0,
+        "y": -0.05,
+        "z": 0.8
+      },
+      {
+        "name": "roofFrontLeft",
+        "zone": "roof",
+        "x": 0.6,
+        "y": 0.99,
+        "z": -0.7
+      },
+      {
+        "name": "roofFrontRight",
+        "zone": "roof",
+        "x": 0.6,
+        "y": 0.99,
+        "z": 0.7
+      },
+      {
+        "name": "roofRearLeft",
+        "zone": "roof",
+        "x": -0.9,
+        "y": 0.99,
+        "z": -0.7
+      },
+      {
+        "name": "roofRearRight",
+        "zone": "roof",
+        "x": -0.9,
+        "y": 0.99,
+        "z": 0.7
+      }
+    ]
+  },
+  "limits": {
+    "maxAngularRate": 40,
+    "maxSpeed": 130,
+    "maxTireLoad": 90000
+  }
+}

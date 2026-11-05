@@ -1,0 +1,186 @@
+{
+  "$comment": "friction = peak friction multiplier relative to the tyre's mu0 (before per-compound surfaceGrip). slideRatio = sliding/peak force. stiffness scales cornering & longitudinal stiffness. penetrationDepth [m] = depth at which a loose layer hides 63% of what lies beneath. depthResistance = extra rolling-resistance coefficient per metre of loose depth. evolution: how the surface changes under traffic (see systems/surface_evolution): sweepPerMeter = fraction of loose depth displaced per metre of wheel travel at nominal load; bearingPressure/soilStiffness drive rut depth; reposeSlope = max depth difference per metre between neighbouring cells before material flows; compactionPerMeter = packing rate.",
+  "categories": [
+    "tarmac",
+    "wet_tarmac",
+    "dirt",
+    "gravel",
+    "mud",
+    "snow",
+    "ice"
+  ],
+  "surfaces": {
+    "tarmac": {
+      "category": "tarmac",
+      "friction": 1.0,
+      "slideRatio": 0.88,
+      "stiffness": 1.0,
+      "rollingResistance": 0.012,
+      "roadTempOffsetK": 8,
+      "heatTransfer": 1.0,
+      "abrasiveness": 1.0,
+      "pressureSensitivity": 0.0,
+      "roughness": 0.0008
+    },
+    "tarmac_wet": {
+      "category": "wet_tarmac",
+      "friction": 0.72,
+      "slideRatio": 0.85,
+      "stiffness": 0.95,
+      "rollingResistance": 0.014,
+      "roadTempOffsetK": -3,
+      "heatTransfer": 1.5,
+      "abrasiveness": 0.8,
+      "pressureSensitivity": 0.0,
+      "roughness": 0.0008
+    },
+    "packed_dirt": {
+      "category": "dirt",
+      "friction": 0.7,
+      "slideRatio": 0.92,
+      "stiffness": 0.8,
+      "rollingResistance": 0.022,
+      "roadTempOffsetK": 4,
+      "heatTransfer": 0.7,
+      "abrasiveness": 1.1,
+      "pressureSensitivity": 0.05,
+      "roughness": 0.004,
+      "evolution": {
+        "loose": false,
+        "compactionPerMeter": 0.002,
+        "bearingPressure": 500000,
+        "soilStiffness": 8000000.0,
+        "maxRut": 0.03
+      }
+    },
+    "gravel": {
+      "category": "gravel",
+      "friction": 0.55,
+      "slideRatio": 0.95,
+      "stiffness": 0.55,
+      "rollingResistance": 0.03,
+      "depthResistance": 0.6,
+      "penetrationDepth": 0.04,
+      "roadTempOffsetK": 3,
+      "heatTransfer": 0.6,
+      "abrasiveness": 1.6,
+      "pressureSensitivity": 0.12,
+      "roughness": 0.006,
+      "evolution": {
+        "loose": true,
+        "sweepPerMeter": 0.12,
+        "compactionPerMeter": 0.01,
+        "bearingPressure": 250000,
+        "soilStiffness": 4000000.0,
+        "maxRut": 0.05,
+        "reposeSlope": 0.6,
+        "ridgeFraction": 0.3
+      }
+    },
+    "mud": {
+      "category": "mud",
+      "friction": 0.36,
+      "slideRatio": 0.9,
+      "stiffness": 0.5,
+      "rollingResistance": 0.07,
+      "depthResistance": 1.4,
+      "penetrationDepth": 0.07,
+      "roadTempOffsetK": 0,
+      "heatTransfer": 0.9,
+      "abrasiveness": 0.5,
+      "pressureSensitivity": 0.2,
+      "roughness": 0.008,
+      "evolution": {
+        "loose": true,
+        "sweepPerMeter": 0.02,
+        "compactionPerMeter": 0.004,
+        "bearingPressure": 40000,
+        "soilStiffness": 600000,
+        "maxRut": 0.2,
+        "reposeSlope": 0.15,
+        "ridgeFraction": 0.5
+      }
+    },
+    "snow": {
+      "category": "snow",
+      "friction": 0.28,
+      "slideRatio": 0.92,
+      "stiffness": 0.45,
+      "rollingResistance": 0.05,
+      "depthResistance": 1.0,
+      "penetrationDepth": 0.08,
+      "roadTempOffsetK": -6,
+      "roadTempCapK": 273.15,
+      "heatTransfer": 1.4,
+      "abrasiveness": 0.2,
+      "pressureSensitivity": 0.3,
+      "roughness": 0.004,
+      "evolution": {
+        "loose": true,
+        "sweepPerMeter": 0.015,
+        "compactionPerMeter": 0.03,
+        "bearingPressure": 60000,
+        "soilStiffness": 800000,
+        "maxRut": 0.12,
+        "reposeSlope": 0.4,
+        "ridgeFraction": 0.3,
+        "compactTo": "snow_packed",
+        "compactThreshold": 0.5
+      }
+    },
+    "snow_packed": {
+      "category": "snow",
+      "friction": 0.34,
+      "slideRatio": 0.88,
+      "stiffness": 0.6,
+      "rollingResistance": 0.02,
+      "roadTempOffsetK": -6,
+      "roadTempCapK": 272.15,
+      "heatTransfer": 1.3,
+      "abrasiveness": 0.3,
+      "pressureSensitivity": 0.2,
+      "roughness": 0.002,
+      "evolution": {
+        "loose": false,
+        "compactionPerMeter": 0.002,
+        "bearingPressure": 400000,
+        "soilStiffness": 6000000.0,
+        "maxRut": 0.02
+      }
+    },
+    "ice": {
+      "category": "ice",
+      "friction": 0.1,
+      "slideRatio": 0.85,
+      "stiffness": 0.4,
+      "rollingResistance": 0.01,
+      "penetrationDepth": 0.004,
+      "roadTempOffsetK": -8,
+      "roadTempCapK": 272.15,
+      "heatTransfer": 1.5,
+      "abrasiveness": 0.3,
+      "pressureSensitivity": 0.05,
+      "roughness": 0.0005
+    },
+    "grass": {
+      "category": "dirt",
+      "friction": 0.42,
+      "slideRatio": 0.95,
+      "stiffness": 0.5,
+      "rollingResistance": 0.055,
+      "depthResistance": 0.0,
+      "roadTempOffsetK": 0,
+      "heatTransfer": 0.8,
+      "abrasiveness": 0.6,
+      "pressureSensitivity": 0.18,
+      "roughness": 0.01,
+      "evolution": {
+        "loose": false,
+        "compactionPerMeter": 0.003,
+        "bearingPressure": 120000,
+        "soilStiffness": 1500000.0,
+        "maxRut": 0.08
+      }
+    }
+  }
+}
